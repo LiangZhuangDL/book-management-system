@@ -18,7 +18,7 @@ public class BasicUser extends BasicEntity implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(unique = true)
     private String username;
 
     @Column
