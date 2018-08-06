@@ -126,5 +126,9 @@ public class BasicUser extends BasicEntity implements UserDetails {
         this.enabled = enabled;
     }
 
-
+    public BasicUser(String username, String password, List<Authority> authorities) {
+        this.username = username;
+        this.password = password;
+        this.authorities = authorities;
+    }
 }

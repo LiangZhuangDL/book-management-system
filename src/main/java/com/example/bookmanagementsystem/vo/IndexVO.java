@@ -6,6 +6,8 @@ public class IndexVO {
 
     private String authorityName;
 
+    private String pageName = "index";
+
     public String getUsername() {
         return username;
     }
@@ -22,6 +24,14 @@ public class IndexVO {
         this.authorityName = authorityName;
     }
 
+    public String getPageName() {
+        return pageName;
+    }
+
+    public void setPageName(String pageName) {
+        this.pageName = pageName;
+    }
+
     public IndexVO(String username) {
         this.username = username;
     }
@@ -29,6 +39,12 @@ public class IndexVO {
     public IndexVO(String username, String authorityName) {
         this.username = username;
         this.authorityName = authorityName;
+    }
+
+    public IndexVO(String username, String authorityName, String pageName) {
+        this.username = username;
+        this.authorityName = authorityName;
+        this.pageName = pageName;
     }
 
     public IndexVO() {

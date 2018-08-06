@@ -1,7 +1,10 @@
 package com.example.bookmanagementsystem.service;
 
-import java.util.Map;
+
+import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 
 public interface RegisterService {
-    Map<String, Object> getCurrentUserInfo();
+    String isLogin();
+
+    Boolean save(BasicUser basicUser);
 }

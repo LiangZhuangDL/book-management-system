@@ -1,33 +1,32 @@
 package com.example.bookmanagementsystem.serviceimpl;
 
+import com.example.bookmanagementsystem.entity.authentication.BasicUser;
+import com.example.bookmanagementsystem.repository.BasicUserRepository;
 import com.example.bookmanagementsystem.service.RegisterService;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class RegisterServiceImpl implements RegisterService {
+
+    @Autowired
+    private BasicUserRepository basicUserRepository;
+
     @Override
-    public Map<String, Object> getCurrentUserInfo() {
-        Map<String, Object> map = new HashMap<>();
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        Collection<? extends GrantedAuthority> authorities = SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-        Integer tag = 0;
-        for(GrantedAuthority authority: authorities){
-            if(authority.getAuthority().equals("ADMIN")){
-                tag = 1;
-            }
-        }
-        if(tag.equals(1)){
-            map.put("authority", "ADMIN");
+    public String isLogin() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
+    }
+
+    @Override
+    public Boolean save(BasicUser basicUser) {
+        BasicUser user = basicUserRepository.save(basicUser);
+        if(ObjectUtils.isEmpty(user)){
+            return false;
         }else {
-            map.put("authority", "USER");
+            return true;
         }
-        map.put("username", username);
-        return map;
     }
 }

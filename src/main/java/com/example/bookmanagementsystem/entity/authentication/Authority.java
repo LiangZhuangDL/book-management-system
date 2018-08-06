@@ -40,4 +40,6 @@ public class Authority extends BasicEntity implements GrantedAuthority {
     public Authority(String name) {
         this.name = name;
     }
+
+
 }
