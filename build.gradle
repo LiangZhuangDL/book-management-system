@@ -37,5 +37,8 @@ dependencies {
 
     // https://mvnrepository.com/artifact/mysql/mysql-connector-java
     compile('mysql:mysql-connector-java:8.0.12')
+    // https://mvnrepository.com/artifact/com.google.code.gson/gson
+    compile('com.google.code.gson:gson:2.8.5')
+
 
 }
