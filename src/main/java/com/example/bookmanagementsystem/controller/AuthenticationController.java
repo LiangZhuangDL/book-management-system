@@ -3,6 +3,7 @@ package com.example.bookmanagementsystem.controller;
 import com.example.bookmanagementsystem.dto.RegisterUserDTO;
 import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import com.example.bookmanagementsystem.service.IndexService;
+import com.example.bookmanagementsystem.service.LoginService;
 import com.example.bookmanagementsystem.service.RegisterService;
 import com.example.bookmanagementsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,9 @@ public class AuthenticationController {
 
     @Autowired
     private RegisterService registerService;
+
+    @Autowired
+    private LoginService loginService;
 
     @GetMapping(value = "/")
     public Response root(){
@@ -56,7 +60,8 @@ public class AuthenticationController {
         String repeatPassword = registerUserDTO.getRepeatPassword();
         Response response = new Response();
         if(password.equals(repeatPassword)){
-            registerUserDTO.setPassword(new BCryptPasswordEncoder().encode(password));
+            BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            registerUserDTO.setPassword(bCryptPasswordEncoder.encode(password));
             BasicUser user = registerUserDTO.convert(registerUserDTO);
             Boolean tag = registerService.save(user);
             if(tag){
@@ -65,6 +70,19 @@ public class AuthenticationController {
             }else{
                 return response.failure();
             }
+        }else{
+            return response.failure();
+        }
+    }
+
+    @GetMapping(value = "/login")
+    public Response login(){
+        String username = loginService.isLogin();
+        Response response = new Response();
+        Map<String, Object> map = new HashMap<>();
+        if(username.equals("anonymousUser")){
+            map.put("username", username);
+            return response.success(map);
         }else{
             return response.failure();
         }

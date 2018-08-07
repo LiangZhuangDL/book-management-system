@@ -41,6 +41,7 @@ public class RegisterServiceImpl implements RegisterService {
                 authorities.add(authority);
             }
             basicUser.setAuthorities(authorities);
+            basicUser.setUpdateUser(basicUser.getUsername());
             BasicUser result = basicUserRepository.save(basicUser);
             if(ObjectUtils.isEmpty(result)){
                 return false;
