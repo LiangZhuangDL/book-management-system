@@ -23,6 +23,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SelfUserDetailsService userDetailsService;
 
+    @Autowired
+    private SelfLogoutSuccessHandler selfLogoutSuccessHandler;
+
+
     @Bean
     public PasswordEncoder passwordEncoder(){
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -39,7 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin().loginProcessingUrl("/login-user").successHandler(selfAuthenticationSuccessHandler).failureHandler(selfAuthenticationFailureHandler)
                 .and()
-                .logout().logoutSuccessUrl("/")
+                .logout().logoutSuccessHandler(selfLogoutSuccessHandler)
                 .and()
                 .csrf().disable();
     }
