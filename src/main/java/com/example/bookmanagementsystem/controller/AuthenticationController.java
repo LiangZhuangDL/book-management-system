@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +30,12 @@ public class AuthenticationController {
     private LoginService loginService;
 
     @GetMapping(value = "/")
-    public Response root(){
+    public ModelAndView root(){
+        return new ModelAndView("redirect:/index");
+    }
+
+    @GetMapping(value = "/index")
+    public Response index(){
         Map<String, Object> map = indexService.getCurrentUserInfo();
         Response response = new Response();
         String username = (String) map.get("username");
@@ -87,5 +93,4 @@ public class AuthenticationController {
             return response.failure();
         }
     }
-
 }

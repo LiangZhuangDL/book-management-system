@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin().loginProcessingUrl("/login-user").successHandler(selfAuthenticationSuccessHandler).failureHandler(selfAuthenticationFailureHandler)
                 .and()
-                .logout().logoutUrl("/logout").logoutSuccessUrl("/")
+                .logout().logoutSuccessUrl("/")
                 .and()
                 .csrf().disable();
     }
