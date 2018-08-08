@@ -21,7 +21,6 @@ public class SelfUserDetailsService implements UserDetailsService {
         if(ObjectUtils.isEmpty(basicUser)){
             return new BasicUser();
         }else {
-            basicUser.setEnabled(true);
             return basicUser;
         }
     }
