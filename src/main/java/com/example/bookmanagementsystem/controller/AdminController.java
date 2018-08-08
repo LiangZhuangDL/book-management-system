@@ -1,6 +1,9 @@
 package com.example.bookmanagementsystem.controller;
 
 import com.example.bookmanagementsystem.entity.DefaultFile;
+import com.example.bookmanagementsystem.entity.authentication.Authority;
+import com.example.bookmanagementsystem.repository.AuthorityRepository;
+import com.example.bookmanagementsystem.service.AuthorityService;
 import com.example.bookmanagementsystem.service.DefaultFileService;
 import com.example.bookmanagementsystem.utils.Response;
 import org.bson.types.Binary;
@@ -22,6 +25,12 @@ public class AdminController {
     @Autowired
     private DefaultFileService defaultFileService;
 
+    @Autowired
+    private AuthorityRepository authorityRepository;
+
+    @Autowired
+    private AuthorityService authorityService;
+
     @PostMapping(value = "/upload")
     public Response defaultUpload(@RequestParam("file")MultipartFile file){
         DefaultFile returnFile = null;
@@ -38,6 +47,25 @@ public class AdminController {
             }
         }catch (IOException e){
             e.printStackTrace();
+            return response.failure();
+        }
+    }
+
+    @PostMapping(value = "/createAuthority")
+    public Response createAuthority(@RequestParam("authorityName")String authorityName){
+        Authority result = authorityRepository.findAuthorityByName(authorityName);
+        Response response = new Response();
+        if(ObjectUtils.isEmpty(result)){
+            Authority authority = new Authority(authorityName);
+            Boolean tag = authorityService.save(authority);
+            if(tag){
+                Map<String, Object> map = new HashMap<>();
+                map.put("result", "创建角色成功");
+                return response.success(map);
+            }else{
+                return response.failure();
+            }
+        }else{
             return response.failure();
         }
     }
