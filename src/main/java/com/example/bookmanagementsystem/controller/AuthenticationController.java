@@ -4,16 +4,12 @@ import com.example.bookmanagementsystem.dto.RegisterUserDTO;
 import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import com.example.bookmanagementsystem.service.IndexService;
 import com.example.bookmanagementsystem.service.LoginService;
+import com.example.bookmanagementsystem.service.MailService;
 import com.example.bookmanagementsystem.service.RegisterService;
-import com.example.bookmanagementsystem.utils.Mailgun;
 import com.example.bookmanagementsystem.utils.Response;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
@@ -31,6 +27,9 @@ public class AuthenticationController {
 
     @Autowired
     private LoginService loginService;
+
+    @Autowired
+    private MailService mailService;
 
     @GetMapping(value = "/")
     public ModelAndView root(){
@@ -70,12 +69,22 @@ public class AuthenticationController {
         Response response = new Response();
         if(password.equals(repeatPassword)){
             BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+            String username = registerUserDTO.getUsername();
             registerUserDTO.setPassword(bCryptPasswordEncoder.encode(password));
             BasicUser user = registerUserDTO.convert(registerUserDTO);
+            String activeCode = bCryptPasswordEncoder.encode(username + password);
+            user.setActiveCode(activeCode);
             Boolean tag = registerService.save(user);
             if(tag){
                 String message = "注册成功";
-                return response.success(message);
+                String to = registerUserDTO.getEmail();
+                String content = mailService.buildContent(activeCode);
+                Boolean success = mailService.sendHtmlMail(to, "您好,请激活您的账号", content);
+                if(success){
+                    return response.success(message);
+                }else {
+                    return response.failure();
+                }
             }else{
                 return response.failure();
             }
@@ -97,17 +106,18 @@ public class AuthenticationController {
         }
     }
 
-//    @GetMapping(value = "/send")
-//    public Response send(){
-//        Response response = new Response();
-//        try{
-//            JsonNode jsonNode = Mailgun.sendInlineImage();
-//            System.out.println(jsonNode);
-//            return response.success("OK");
-//        }catch (UnirestException ue){
-//            ue.printStackTrace();
-//            return response.failure();
-//        }
-//    }
+    @GetMapping(value = "/active")
+    public Response activeUser(@RequestParam String activeCode){
+        System.out.println(activeCode);
+        Boolean tag = registerService.activeUser(activeCode);
+        Response response = new Response();
+        if(tag){
+            Map<String, Object> map = new HashMap<>();
+            map.put("result", "账号激活成功");
+            return response.success(map);
+        }else{
+            return response.failure();
+        }
+    }
 
 }

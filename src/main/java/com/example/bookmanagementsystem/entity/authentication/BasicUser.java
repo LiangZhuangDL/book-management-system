@@ -40,6 +40,9 @@ public class BasicUser extends BasicEntity implements UserDetails {
     @Column
     private Boolean enabled = false;
 
+    @Column
+    private String activeCode;
+
 
 
     @Override
@@ -111,6 +114,14 @@ public class BasicUser extends BasicEntity implements UserDetails {
 
     public Long getId() {
         return id;
+    }
+
+    public String getActiveCode() {
+        return activeCode;
+    }
+
+    public void setActiveCode(String activeCode) {
+        this.activeCode = activeCode;
     }
 
     public BasicUser() {

@@ -24,11 +24,12 @@ public class MailServiceImpl implements MailService {
         try{
             MimeMessage message = javaMailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
-            helper.setFrom(from);
+            helper.setFrom("liang_zhuang@foxmail.com");
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(content, true);
             javaMailSender.send(message);
+
             return true;
         }catch (MessagingException me){
             me.printStackTrace();
@@ -38,7 +39,11 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public String buildContent(String activeCode) {
-        String content ="";
-        return null;
+        String content = "<html>\n<body>\n" +
+                "<h3>请复制您的激活码去激活您的账号</h3>\n" +
+                "<br>\n" +
+                "localhost:4000/active?activeCode=" + activeCode + "\n" +
+                "</body>\n</html>\n";
+        return content;
     }
 }

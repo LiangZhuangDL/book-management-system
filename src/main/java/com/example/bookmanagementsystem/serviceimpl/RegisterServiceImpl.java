@@ -4,6 +4,7 @@ import com.example.bookmanagementsystem.entity.authentication.Authority;
 import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import com.example.bookmanagementsystem.repository.AuthorityRepository;
 import com.example.bookmanagementsystem.repository.BasicUserRepository;
+import com.example.bookmanagementsystem.service.MailService;
 import com.example.bookmanagementsystem.service.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -52,5 +53,27 @@ public class RegisterServiceImpl implements RegisterService {
             return false;
         }
 
+    }
+
+    @Override
+    public Boolean update(BasicUser basicUser) {
+       BasicUser result = basicUserRepository.save(basicUser);
+        if(ObjectUtils.isEmpty(result)){
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+    @Override
+    public Boolean activeUser(String activeCode) {
+        BasicUser user = basicUserRepository.findBasicUserByActiveCode(activeCode);
+        if(!ObjectUtils.isEmpty(user) && !user.isEnabled()){
+            user.setEnabled(true);
+            Boolean tag = update(user);
+            return tag;
+        }else{
+            return false;
+        }
     }
 }
