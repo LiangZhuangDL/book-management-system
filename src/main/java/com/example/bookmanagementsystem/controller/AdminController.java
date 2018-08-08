@@ -31,7 +31,7 @@ public class AdminController {
             returnFile = defaultFileService.save(f);
             if(!ObjectUtils.isEmpty(returnFile)){
                 Map<String, Object> map = new HashMap<>();
-                map.put("success", true);
+                map.put("result", "upload success");
                 return response.success(map);
             }else{
                 return response.failure();
