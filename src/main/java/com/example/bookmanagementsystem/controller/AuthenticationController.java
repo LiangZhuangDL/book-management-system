@@ -5,7 +5,10 @@ import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import com.example.bookmanagementsystem.service.IndexService;
 import com.example.bookmanagementsystem.service.LoginService;
 import com.example.bookmanagementsystem.service.RegisterService;
+import com.example.bookmanagementsystem.utils.Mailgun;
 import com.example.bookmanagementsystem.utils.Response;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -93,4 +96,18 @@ public class AuthenticationController {
             return response.failure();
         }
     }
+
+//    @GetMapping(value = "/send")
+//    public Response send(){
+//        Response response = new Response();
+//        try{
+//            JsonNode jsonNode = Mailgun.sendInlineImage();
+//            System.out.println(jsonNode);
+//            return response.success("OK");
+//        }catch (UnirestException ue){
+//            ue.printStackTrace();
+//            return response.failure();
+//        }
+//    }
+
 }
