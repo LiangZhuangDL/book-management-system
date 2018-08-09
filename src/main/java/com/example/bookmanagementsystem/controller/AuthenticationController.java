@@ -106,9 +106,8 @@ public class AuthenticationController {
         }
     }
 
-    @GetMapping(value = "/active")
-    public Response activeUser(@RequestParam String activeCode){
-        System.out.println(activeCode);
+    @GetMapping(value = "/active/active-code")
+    public Response activeUser(@RequestParam("activeCode") String activeCode){
         Boolean tag = registerService.activeUser(activeCode);
         Response response = new Response();
         if(tag){

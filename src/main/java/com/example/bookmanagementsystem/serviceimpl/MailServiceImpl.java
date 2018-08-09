@@ -42,7 +42,7 @@ public class MailServiceImpl implements MailService {
         String content = "<html>\n<body>\n" +
                 "<h3>请复制您的激活码去激活您的账号</h3>\n" +
                 "<br>\n" +
-                "localhost:4000/active?activeCode=" + activeCode + "\n" +
+                "localhost:4000/active/active-code?activeCode=" + activeCode + "\n" +
                 "</body>\n</html>\n";
         return content;
     }
