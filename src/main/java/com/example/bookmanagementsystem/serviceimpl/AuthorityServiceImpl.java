@@ -36,7 +36,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         BasicUser basicUser = basicUserRepository.findBasicUserById(authorityDTO.getUserId());
         if(!ObjectUtils.isEmpty(basicUser)){
             List<Authority> authorities = (List<Authority>) basicUser.getAuthorities();
-            Boolean tag = true;
+            boolean tag = true;
             for(Authority authority: authorities){
                 if((authorityDTO.getAuthorityName()).equals(authority.getAuthority())){
                     tag = false;
@@ -66,7 +66,7 @@ public class AuthorityServiceImpl implements AuthorityService {
         BasicUser basicUser = basicUserRepository.findBasicUserById(authorityDTO.getUserId());
         if(!ObjectUtils.isEmpty(basicUser)){
             List<Authority> authorities = (List<Authority>) basicUser.getAuthorities();
-            Boolean tag = true;
+            boolean tag = true;
             for(Authority authority: authorities){
                 if((authorityDTO.getAuthorityName()).equals(authority.getAuthority())){
                     tag = false;
