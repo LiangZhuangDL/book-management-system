@@ -96,4 +96,9 @@ public class AdminController {
             return response.failure();
         }
     }
+
+    @PostMapping(value = "/removeUser")
+    public Response removeUser(Long userId){
+        return null;
+    }
 }
