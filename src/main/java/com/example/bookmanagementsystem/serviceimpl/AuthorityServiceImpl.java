@@ -7,10 +7,8 @@ import com.example.bookmanagementsystem.repository.AuthorityRepository;
 import com.example.bookmanagementsystem.repository.BasicUserRepository;
 import com.example.bookmanagementsystem.service.AuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import java.util.Collection;
 import java.util.List;
 
 
