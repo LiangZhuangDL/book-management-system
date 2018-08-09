@@ -1,5 +1,6 @@
 package com.example.bookmanagementsystem.controller;
 
+import com.example.bookmanagementsystem.dto.AuthorityDTO;
 import com.example.bookmanagementsystem.entity.DefaultFile;
 import com.example.bookmanagementsystem.entity.authentication.Authority;
 import com.example.bookmanagementsystem.repository.AuthorityRepository;
@@ -65,6 +66,32 @@ public class AdminController {
             }else{
                 return response.failure();
             }
+        }else{
+            return response.failure();
+        }
+    }
+
+    @PostMapping(value = "/addAuthority")
+    public Response addAuthority(AuthorityDTO authorityDTO){
+        Boolean tag = authorityService.addAuthority(authorityDTO);
+        Response response = new Response();
+        if(tag){
+            Map<String, Object> map = new HashMap<>();
+            map.put("result", "添加角色成功");
+            return response.success(map);
+        }else{
+            return response.failure();
+        }
+    }
+
+    @PostMapping(value = "/removeAuthority")
+    public Response removeAuthority(AuthorityDTO authorityDTO){
+        Boolean tag = authorityService.removeAuthority(authorityDTO);
+        Response response = new Response();
+        if(tag){
+            Map<String, Object> map = new HashMap<>();
+            map.put("result", "删除角色成功");
+            return response.success(map);
         }else{
             return response.failure();
         }

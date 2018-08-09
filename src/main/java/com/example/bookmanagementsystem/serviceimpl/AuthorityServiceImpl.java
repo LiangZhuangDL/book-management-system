@@ -1,5 +1,6 @@
 package com.example.bookmanagementsystem.serviceimpl;
 
+import com.example.bookmanagementsystem.dto.AuthorityDTO;
 import com.example.bookmanagementsystem.entity.authentication.Authority;
 import com.example.bookmanagementsystem.repository.AuthorityRepository;
 import com.example.bookmanagementsystem.service.AuthorityService;
@@ -21,5 +22,15 @@ public class AuthorityServiceImpl implements AuthorityService {
         }else{
             return false;
         }
+    }
+
+    @Override
+    public Boolean addAuthority(AuthorityDTO authorityDTO) {
+        return null;
+    }
+
+    @Override
+    public Boolean removeAuthority(AuthorityDTO authorityDTO) {
+        return null;
     }
 }
