@@ -8,4 +8,6 @@ public interface BasicUserRepository extends JpaRepository<BasicUser, Long> {
     BasicUser findBasicUserByUsername(String username);
 
     BasicUser findBasicUserByActiveCode(String activeCode);
+
+    BasicUser findBasicUserById(Long id);
 }
