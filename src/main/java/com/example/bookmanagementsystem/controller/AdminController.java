@@ -5,6 +5,7 @@ import com.example.bookmanagementsystem.entity.DefaultFile;
 import com.example.bookmanagementsystem.entity.authentication.Authority;
 import com.example.bookmanagementsystem.repository.AuthorityRepository;
 import com.example.bookmanagementsystem.service.AuthorityService;
+import com.example.bookmanagementsystem.service.BasicUserService;
 import com.example.bookmanagementsystem.service.DefaultFileService;
 import com.example.bookmanagementsystem.utils.Response;
 import org.bson.types.Binary;
@@ -22,6 +23,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
+
+    @Autowired
+    private BasicUserService basicUserService;
 
     @Autowired
     private DefaultFileService defaultFileService;
@@ -99,6 +103,14 @@ public class AdminController {
 
     @PostMapping(value = "/removeUser")
     public Response removeUser(Long userId){
-        return null;
+        Boolean tag = basicUserService.removeUserById(userId);
+        Response response = new Response();
+        if(tag){
+            Map<String, Object> map = new HashMap<>();
+            map.put("result", "删除用户成功");
+            return response.success(map);
+        }else {
+            return response.failure();
+        }
     }
 }
