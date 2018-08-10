@@ -13,8 +13,8 @@ public class Authority extends BasicEntity implements GrantedAuthority {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private String name = "USER";
+    @Column(unique = true)
+    private String name;
 
     @Override
     public String getAuthority() {

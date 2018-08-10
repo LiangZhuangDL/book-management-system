@@ -7,8 +7,12 @@ import com.example.bookmanagementsystem.repository.AuthorityRepository;
 import com.example.bookmanagementsystem.repository.BasicUserRepository;
 import com.example.bookmanagementsystem.service.AuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+
+import java.util.Collection;
 import java.util.List;
 
 
@@ -35,7 +39,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     public Boolean addAuthority(AuthorityDTO authorityDTO) {
         BasicUser basicUser = basicUserRepository.findBasicUserById(authorityDTO.getUserId());
         if(!ObjectUtils.isEmpty(basicUser)){
-            List<Authority> authorities = (List<Authority>) basicUser.getAuthorities();
+            List<Authority> authorities = basicUser.getAuthorities();
             boolean tag = true;
             for(Authority authority: authorities){
                 if((authorityDTO.getAuthorityName()).equals(authority.getAuthority())){
@@ -43,7 +47,7 @@ public class AuthorityServiceImpl implements AuthorityService {
                 }
             }
             if(tag){
-                Authority authority = authorityRepository.findAuthorityByName(authorityDTO.getAuthorityName());
+                Authority authority = new Authority(authorityDTO.getAuthorityName());
                 if(!ObjectUtils.isEmpty(authority)){
                     authorities.add(authority);
                     basicUser.setAuthorities(authorities);
@@ -58,18 +62,18 @@ public class AuthorityServiceImpl implements AuthorityService {
                 }
             }
         }
-        return null;
+        return false;
     }
 
     @Override
     public Boolean removeAuthority(AuthorityDTO authorityDTO) {
         BasicUser basicUser = basicUserRepository.findBasicUserById(authorityDTO.getUserId());
         if(!ObjectUtils.isEmpty(basicUser)){
-            List<Authority> authorities = (List<Authority>) basicUser.getAuthorities();
-            boolean tag = true;
+            List<Authority> authorities = basicUser.getAuthorities();
+            boolean tag = false;
             for(Authority authority: authorities){
                 if((authorityDTO.getAuthorityName()).equals(authority.getAuthority())){
-                    tag = false;
+                    tag = true;
                 }
             }
             if(tag){
@@ -88,6 +92,6 @@ public class AuthorityServiceImpl implements AuthorityService {
                 }
             }
         }
-        return null;
+        return false;
     }
 }

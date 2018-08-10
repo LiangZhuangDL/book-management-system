@@ -1,6 +1,7 @@
 package com.example.bookmanagementsystem.controller;
 
 import com.example.bookmanagementsystem.dto.RegisterUserDTO;
+import com.example.bookmanagementsystem.entity.authentication.Authority;
 import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import com.example.bookmanagementsystem.service.IndexService;
 import com.example.bookmanagementsystem.service.LoginService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -40,13 +42,7 @@ public class AuthenticationController {
     public Response index(){
         Map<String, Object> map = indexService.getCurrentUserInfo();
         Response response = new Response();
-        String username = (String) map.get("username");
-        String authority = (String) map.get("authority");
-        if(authority.equals("ADMIN") && username.equals("anonymousUser")){
-            return response.failure();
-        }else{
-            return response.success(map);
-        }
+        return response.success(map);
     }
 
     @GetMapping(value = "/register")

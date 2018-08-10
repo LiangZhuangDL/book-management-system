@@ -24,7 +24,7 @@ public class BasicUser extends BasicEntity implements UserDetails {
     @Column
     private String password;
 
-    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "basic_user_authority", joinColumns = @JoinColumn(name = "basic_user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "authority_id", referencedColumnName = "id"))
     private List<Authority> authorities;
 
@@ -46,12 +46,12 @@ public class BasicUser extends BasicEntity implements UserDetails {
 
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<SimpleGrantedAuthority> simpleGrantedAuthorities = new ArrayList<>();
+    public List<Authority> getAuthorities() {
+        List<Authority> authorities = new ArrayList<>();
         for(GrantedAuthority authority : this.authorities){
-            simpleGrantedAuthorities.add(new SimpleGrantedAuthority(authority.getAuthority()));
+            authorities.add(new Authority(authority.getAuthority()));
         }
-        return simpleGrantedAuthorities;
+        return authorities;
     }
 
     @Override
