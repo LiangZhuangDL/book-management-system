@@ -40,7 +40,7 @@ public class BasicUser extends BasicEntity implements UserDetails {
 
     @Override
     public List<Authority> getAuthorities() {
-        return this.authorities;
+        return authorities;
     }
 
     @Override
