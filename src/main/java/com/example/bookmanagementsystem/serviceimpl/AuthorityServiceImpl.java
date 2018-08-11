@@ -12,6 +12,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -49,8 +50,10 @@ public class AuthorityServiceImpl implements AuthorityService {
             if(tag){
                 Authority authority = new Authority(authorityDTO.getAuthorityName());
                 if(!ObjectUtils.isEmpty(authority)){
-                    authorities.add(authority);
-                    basicUser.setAuthorities(authorities);
+                    List<Authority> authorityList = new ArrayList<>();
+                    Authority auth = new Authority(authority.getAuthority());
+                    authorityList.add(auth);
+                    basicUser.setAuthorities(authorityList);
                     BasicUser result = basicUserRepository.save(basicUser);
                     if(!ObjectUtils.isEmpty(result)){
                         return true;

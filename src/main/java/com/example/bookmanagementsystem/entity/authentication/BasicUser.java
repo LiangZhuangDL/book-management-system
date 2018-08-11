@@ -43,15 +43,9 @@ public class BasicUser extends BasicEntity implements UserDetails {
     @Column
     private String activeCode;
 
-
-
     @Override
     public List<Authority> getAuthorities() {
-        List<Authority> authorities = new ArrayList<>();
-        for(GrantedAuthority authority : this.authorities){
-            authorities.add(new Authority(authority.getAuthority()));
-        }
-        return authorities;
+        return this.authorities;
     }
 
     @Override
