@@ -2,17 +2,17 @@ package com.example.bookmanagementsystem.controller;
 
 import com.example.bookmanagementsystem.dto.AuthorityDTO;
 import com.example.bookmanagementsystem.entity.DefaultFile;
+import com.example.bookmanagementsystem.entity.authentication.Authority;
+import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import com.example.bookmanagementsystem.service.AuthorityService;
 import com.example.bookmanagementsystem.service.BasicUserService;
 import com.example.bookmanagementsystem.service.DefaultFileService;
 import com.example.bookmanagementsystem.utils.Response;
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.HashMap;
@@ -30,6 +30,16 @@ public class AdminController {
 
     @Autowired
     private AuthorityService authorityService;
+
+    @GetMapping(value = "/showAllAuthorities/{page}/{size}")
+    public Page<Authority> showAllAuthorities(@PathVariable("page")Integer page, @PathVariable("size")Integer size){
+        return authorityService.getAllAuthorities(page, size);
+    }
+
+    @GetMapping(value = "/showAllUsers/{page}/{size}")
+    public Page<BasicUser> showAllUsers(@PathVariable("page")Integer page, @PathVariable("size")Integer size){
+        return basicUserService.getAllUsers(page, size);
+    }
 
     @PostMapping(value = "/upload")
     public Response defaultUpload(@RequestParam("file")MultipartFile file){

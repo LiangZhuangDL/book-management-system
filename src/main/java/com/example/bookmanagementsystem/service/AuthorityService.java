@@ -2,6 +2,7 @@ package com.example.bookmanagementsystem.service;
 
 import com.example.bookmanagementsystem.dto.AuthorityDTO;
 import com.example.bookmanagementsystem.entity.authentication.Authority;
+import org.springframework.data.domain.Page;
 
 public interface AuthorityService {
 
@@ -14,4 +15,6 @@ public interface AuthorityService {
     Boolean createAuthority(String authorityName);
 
     Boolean removeAuthority(String authorityName);
+
+    Page<Authority> getAllAuthorities(Integer page, Integer size);
 }

@@ -4,6 +4,9 @@ import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import com.example.bookmanagementsystem.repository.BasicUserRepository;
 import com.example.bookmanagementsystem.service.BasicUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -35,5 +38,11 @@ public class BasicUserServiceImpl implements BasicUserService {
         }else {
             return false;
         }
+    }
+
+    @Override
+    public Page<BasicUser> getAllUsers(Integer page, Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return basicUserRepository.findAll(pageable);
     }
 }
