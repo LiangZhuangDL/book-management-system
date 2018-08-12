@@ -40,7 +40,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     public Boolean addAuthority(AuthorityDTO authorityDTO) {
         BasicUser basicUser = basicUserRepository.findBasicUserById(authorityDTO.getUserId());
         if(!ObjectUtils.isEmpty(basicUser)){
-            List<Authority> authorities = basicUser.getAuthorities();
+            List<Authority> authorities = basicUser.getRoles();
             boolean tag = true;
             for(Authority authority: authorities){
                 if((authorityDTO.getAuthorityName()).equals(authority.getAuthority())){
@@ -50,16 +50,12 @@ public class AuthorityServiceImpl implements AuthorityService {
             if(tag){
                 Authority authority = new Authority(authorityDTO.getAuthorityName());
                 if(!ObjectUtils.isEmpty(authority)){
-                    List<Authority> authorityList = new ArrayList<>();
+                    List<Authority> authorityList = basicUser.getRoles();
                     Authority auth = new Authority(authority.getAuthority());
                     authorityList.add(auth);
                     basicUser.setAuthorities(authorityList);
                     BasicUser result = basicUserRepository.save(basicUser);
-                    if(!ObjectUtils.isEmpty(result)){
-                        return true;
-                    }else {
-                        return false;
-                    }
+                    return !ObjectUtils.isEmpty(result);
                 }else{
                     return false;
                 }
@@ -72,7 +68,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     public Boolean removeAuthority(AuthorityDTO authorityDTO) {
         BasicUser basicUser = basicUserRepository.findBasicUserById(authorityDTO.getUserId());
         if(!ObjectUtils.isEmpty(basicUser)){
-            List<Authority> authorities = basicUser.getAuthorities();
+            List<Authority> authorities = basicUser.getRoles();
             boolean tag = false;
             for(Authority authority: authorities){
                 if((authorityDTO.getAuthorityName()).equals(authority.getAuthority())){
@@ -85,11 +81,7 @@ public class AuthorityServiceImpl implements AuthorityService {
                     authorities.remove(authority);
                     basicUser.setAuthorities(authorities);
                     BasicUser result = basicUserRepository.save(basicUser);
-                    if(!ObjectUtils.isEmpty(result)){
-                        return true;
-                    }else {
-                        return false;
-                    }
+                    return !ObjectUtils.isEmpty(result);
                 }else{
                     return false;
                 }

@@ -1,8 +1,12 @@
 package com.example.bookmanagementsystem.entity.authentication;
 
 import com.example.bookmanagementsystem.entity.BasicEntity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
@@ -39,7 +43,16 @@ public class BasicUser extends BasicEntity implements UserDetails {
     private String activeCode;
 
     @Override
-    public List<Authority> getAuthorities() {
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        List<Authority> roles = this.getRoles();
+        for (Authority role : roles) {
+            authorities.add(new SimpleGrantedAuthority(role.getAuthority()));
+        }
+        return authorities;
+    }
+
+    public List<Authority> getRoles(){
         return authorities;
     }
 
@@ -131,4 +144,6 @@ public class BasicUser extends BasicEntity implements UserDetails {
         this.password = password;
         this.authorities = authorities;
     }
+
+
 }
