@@ -39,54 +39,51 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     public Boolean addAuthority(AuthorityDTO authorityDTO) {
         BasicUser basicUser = basicUserRepository.findBasicUserById(authorityDTO.getUserId());
-        if(!ObjectUtils.isEmpty(basicUser)){
-            List<Authority> authorities = basicUser.getRoles();
+        Authority authority = authorityRepository.findAuthorityByName(authorityDTO.getAuthorityName());
+        if(!ObjectUtils.isEmpty(authority) && !ObjectUtils.isEmpty(basicUser)){
             boolean tag = true;
-            for(Authority authority: authorities){
-                if((authorityDTO.getAuthorityName()).equals(authority.getAuthority())){
+            List<Authority> authorities = basicUser.getRoles();
+            for(Authority auth : authorities){
+                if((auth.getAuthority()).equals(authority.getAuthority())){
                     tag = false;
                 }
             }
             if(tag){
-                Authority authority = new Authority(authorityDTO.getAuthorityName());
-                if(!ObjectUtils.isEmpty(authority)){
-                    List<Authority> authorityList = basicUser.getRoles();
-                    Authority auth = new Authority(authority.getAuthority());
-                    authorityList.add(auth);
-                    basicUser.setAuthorities(authorityList);
-                    BasicUser result = basicUserRepository.save(basicUser);
-                    return !ObjectUtils.isEmpty(result);
-                }else{
-                    return false;
-                }
+                authorities.add(authority);
+                basicUser.setAuthorities(authorities);
+                BasicUser result = basicUserRepository.save(basicUser);
+                return !ObjectUtils.isEmpty(result);
+            }else{
+                return false;
             }
+        }else{
+            return false;
         }
-        return false;
     }
 
     @Override
     public Boolean removeAuthority(AuthorityDTO authorityDTO) {
         BasicUser basicUser = basicUserRepository.findBasicUserById(authorityDTO.getUserId());
-        if(!ObjectUtils.isEmpty(basicUser)){
-            List<Authority> authorities = basicUser.getRoles();
+        Authority authority = authorityRepository.findAuthorityByName(authorityDTO.getAuthorityName());
+        if(!ObjectUtils.isEmpty(authority) && !ObjectUtils.isEmpty(basicUser)) {
             boolean tag = false;
-            for(Authority authority: authorities){
-                if((authorityDTO.getAuthorityName()).equals(authority.getAuthority())){
+            List<Authority> authorities = basicUser.getRoles();
+            for (Authority auth : authorities) {
+                if ((auth.getAuthority()).equals(authority.getAuthority())) {
                     tag = true;
                 }
             }
-            if(tag){
-                Authority authority = authorityRepository.findAuthorityByName(authorityDTO.getAuthorityName());
-                if(!ObjectUtils.isEmpty(authority)){
-                    authorities.remove(authority);
-                    basicUser.setAuthorities(authorities);
-                    BasicUser result = basicUserRepository.save(basicUser);
-                    return !ObjectUtils.isEmpty(result);
-                }else{
-                    return false;
-                }
+            if (tag) {
+                authorities.remove(authority);
+                basicUser.setAuthorities(authorities);
+                BasicUser result = basicUserRepository.save(basicUser);
+                return !ObjectUtils.isEmpty(result);
+            } else {
+                return false;
             }
+        }else{
+            return false;
         }
-        return false;
+
     }
 }
