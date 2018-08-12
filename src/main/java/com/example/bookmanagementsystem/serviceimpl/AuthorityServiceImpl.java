@@ -7,13 +7,8 @@ import com.example.bookmanagementsystem.repository.AuthorityRepository;
 import com.example.bookmanagementsystem.repository.BasicUserRepository;
 import com.example.bookmanagementsystem.service.AuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 
@@ -29,11 +24,7 @@ public class AuthorityServiceImpl implements AuthorityService {
     @Override
     public Boolean save(Authority authority) {
         Authority result = authorityRepository.save(authority);
-        if(!ObjectUtils.isEmpty(result)){
-            return true;
-        }else{
-            return false;
-        }
+        return !ObjectUtils.isEmpty(result);
     }
 
     @Override
@@ -84,6 +75,27 @@ public class AuthorityServiceImpl implements AuthorityService {
         }else{
             return false;
         }
+    }
 
+    @Override
+    public Boolean createAuthority(String authorityName) {
+        Authority authority = authorityRepository.findAuthorityByName(authorityName);
+        if(ObjectUtils.isEmpty(authority)){
+            Authority auth = new Authority(authorityName);
+            return save(auth);
+        }else{
+            return false;
+        }
+    }
+
+    @Override
+    public Boolean removeAuthority(String authorityName) {
+        Authority authority = authorityRepository.findAuthorityByName(authorityName);
+        if(!ObjectUtils.isEmpty(authority)){
+            authority.setDelete(true);
+            return save(authority);
+        }else {
+            return false;
+        }
     }
 }

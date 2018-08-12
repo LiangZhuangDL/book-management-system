@@ -24,4 +24,16 @@ public class BasicUserServiceImpl implements BasicUserService {
             return false;
         }
     }
+
+    @Override
+    public Boolean activeUser(String username) {
+        BasicUser basicUser = basicUserRepository.findBasicUserByUsernameAndIsDelete(username, true);
+        if(!ObjectUtils.isEmpty(basicUser)){
+            basicUser.setDelete(false);
+            BasicUser result = basicUserRepository.save(basicUser);
+            return !ObjectUtils.isEmpty(result);
+        }else {
+            return false;
+        }
+    }
 }

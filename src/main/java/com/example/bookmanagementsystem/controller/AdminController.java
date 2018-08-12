@@ -2,8 +2,6 @@ package com.example.bookmanagementsystem.controller;
 
 import com.example.bookmanagementsystem.dto.AuthorityDTO;
 import com.example.bookmanagementsystem.entity.DefaultFile;
-import com.example.bookmanagementsystem.entity.authentication.Authority;
-import com.example.bookmanagementsystem.repository.AuthorityRepository;
 import com.example.bookmanagementsystem.service.AuthorityService;
 import com.example.bookmanagementsystem.service.BasicUserService;
 import com.example.bookmanagementsystem.service.DefaultFileService;
@@ -31,9 +29,6 @@ public class AdminController {
     private DefaultFileService defaultFileService;
 
     @Autowired
-    private AuthorityRepository authorityRepository;
-
-    @Autowired
     private AuthorityService authorityService;
 
     @PostMapping(value = "/upload")
@@ -58,30 +53,32 @@ public class AdminController {
 
     @PostMapping(value = "/createAuthority")
     public Response createAuthority(@RequestParam("authorityName")String authorityName){
-        Authority result = authorityRepository.findAuthorityByName(authorityName);
+       Boolean result = authorityService.createAuthority(authorityName);
+       Response response = new Response();
+       if(result){
+           Map<String, Object> map = new HashMap<>();
+           map.put("data", "创建角色成功");
+           return response.success(map);
+       }else {
+           return response.failure();
+       }
+    }
+
+    @PostMapping(value = "/removeAuthority")
+    public Response removeAuthority(@RequestParam("authorityName")String authorityName){
+        Boolean result = authorityService.removeAuthority(authorityName);
         Response response = new Response();
-        if(ObjectUtils.isEmpty(result)){
-            Authority authority = new Authority(authorityName);
-            Boolean tag = authorityService.save(authority);
-            if(tag){
-                Map<String, Object> map = new HashMap<>();
-                map.put("result", "创建角色成功");
-                return response.success(map);
-            }else{
-                return response.failure();
-            }
+        if(result){
+            Map<String, Object> map = new HashMap<>();
+            map.put("data", "删除角色成功");
+            return response.success(map);
         }else{
             return response.failure();
         }
     }
 
-//    @PostMapping(value = "/removeAuthority")
-//    public Response removeAuthority(@RequestParam("authorityName")String authorityName){
-//        return null;
-//    }
-
-    @PostMapping(value = "/addAuthority")
-    public Response addAuthority(AuthorityDTO authorityDTO){
+    @PostMapping(value = "/addAuthorityToUser")
+    public Response addAuthorityToUser(AuthorityDTO authorityDTO){
         Boolean tag = authorityService.addAuthority(authorityDTO);
         Response response = new Response();
         if(tag){
@@ -93,8 +90,8 @@ public class AdminController {
         }
     }
 
-    @PostMapping(value = "/removeAuthority")
-    public Response removeAuthority(AuthorityDTO authorityDTO){
+    @PostMapping(value = "/removeAuthorityFromUser")
+    public Response removeAuthorityFromUser(AuthorityDTO authorityDTO){
         Boolean tag = authorityService.removeAuthority(authorityDTO);
         Response response = new Response();
         if(tag){
@@ -106,10 +103,18 @@ public class AdminController {
         }
     }
 
-//    @PostMapping(value = "/restoreUser")
-//    public Response restoreUser(String username){
-//        return null;
-//    }
+    @PostMapping(value = "/activeUser")
+    public Response activeUser(String username){
+        Boolean result = basicUserService.activeUser(username);
+        Response response = new Response();
+        if(result){
+            Map<String, Object> map = new HashMap<>();
+            map.put("result", "激活用户成功");
+            return response.success(map);
+        }else {
+            return response.failure();
+        }
+    }
 
     @PostMapping(value = "/removeUser")
     public Response removeUser(Long userId){

@@ -10,4 +10,8 @@ public interface AuthorityService {
     Boolean addAuthority(AuthorityDTO authorityDTO);
 
     Boolean removeAuthority(AuthorityDTO authorityDTO);
+
+    Boolean createAuthority(String authorityName);
+
+    Boolean removeAuthority(String authorityName);
 }

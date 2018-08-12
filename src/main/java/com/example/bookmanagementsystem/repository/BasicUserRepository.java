@@ -10,4 +10,6 @@ public interface BasicUserRepository extends JpaRepository<BasicUser, Long> {
     BasicUser findBasicUserByActiveCode(String activeCode);
 
     BasicUser findBasicUserById(Long id);
+
+    BasicUser findBasicUserByUsernameAndIsDelete(String username, Boolean delete);
 }

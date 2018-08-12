@@ -16,6 +16,9 @@ public class Authority extends BasicEntity implements GrantedAuthority {
     @Column(unique = true)
     private String name;
 
+    @Column
+    private Boolean isDelete = false;
+
     @Override
     public String getAuthority() {
         return name;
@@ -32,6 +35,14 @@ public class Authority extends BasicEntity implements GrantedAuthority {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Boolean getDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(Boolean delete) {
+        isDelete = delete;
     }
 
     public Authority() {
