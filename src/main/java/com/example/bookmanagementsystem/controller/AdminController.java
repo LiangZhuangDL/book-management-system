@@ -75,6 +75,11 @@ public class AdminController {
         }
     }
 
+//    @PostMapping(value = "/removeAuthority")
+//    public Response removeAuthority(@RequestParam("authorityName")String authorityName){
+//        return null;
+//    }
+
     @PostMapping(value = "/addAuthority")
     public Response addAuthority(AuthorityDTO authorityDTO){
         Boolean tag = authorityService.addAuthority(authorityDTO);
@@ -101,6 +106,11 @@ public class AdminController {
         }
     }
 
+//    @PostMapping(value = "/restoreUser")
+//    public Response restoreUser(String username){
+//        return null;
+//    }
+
     @PostMapping(value = "/removeUser")
     public Response removeUser(Long userId){
         Boolean tag = basicUserService.removeUserById(userId);
@@ -113,5 +123,5 @@ public class AdminController {
             return response.failure();
         }
     }
-    //
+
 }
