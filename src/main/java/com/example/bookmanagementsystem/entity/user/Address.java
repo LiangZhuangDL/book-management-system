@@ -1,4 +1,4 @@
-package com.example.bookmanagementsystem.entity.authentication;
+package com.example.bookmanagementsystem.entity.user;
 
 import com.example.bookmanagementsystem.entity.BasicEntity;
 

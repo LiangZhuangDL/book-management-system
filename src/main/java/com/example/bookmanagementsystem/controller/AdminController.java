@@ -1,23 +1,23 @@
 package com.example.bookmanagementsystem.controller;
 
 import com.example.bookmanagementsystem.dto.AuthorityDTO;
-import com.example.bookmanagementsystem.entity.DefaultFile;
 import com.example.bookmanagementsystem.entity.authentication.Authority;
 import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import com.example.bookmanagementsystem.service.AuthorityService;
 import com.example.bookmanagementsystem.service.BasicUserService;
-import com.example.bookmanagementsystem.service.DefaultFileService;
 import com.example.bookmanagementsystem.utils.Response;
-import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @program: book-management-system
+ * @description: 管理员控制器
+ * @author: Simon Zhuang
+ * @create: 2018-08-13 11:51
+ **/
 @RestController
 @RequestMapping("/admin")
 public class AdminController {
@@ -26,43 +26,41 @@ public class AdminController {
     private BasicUserService basicUserService;
 
     @Autowired
-    private DefaultFileService defaultFileService;
-
-    @Autowired
     private AuthorityService authorityService;
 
     @GetMapping(value = "/showAllAuthorities/{page}/{size}")
     public Page<Authority> showAllAuthorities(@PathVariable("page")Integer page, @PathVariable("size")Integer size){
+        /** 
+        * @Description: 分页显示全部角色的列表 
+        * @Param: [page, size] 
+        * @return: org.springframework.data.domain.Page<com.example.bookmanagementsystem.entity.authentication.Authority> 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         return authorityService.getAllAuthorities(page, size);
     }
 
     @GetMapping(value = "/showAllUsers/{page}/{size}")
     public Page<BasicUser> showAllUsers(@PathVariable("page")Integer page, @PathVariable("size")Integer size){
+        /** 
+        * @Description: 分页显示全部用户的列表 
+        * @Param: [page, size] 
+        * @return: org.springframework.data.domain.Page<com.example.bookmanagementsystem.entity.authentication.BasicUser> 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         return basicUserService.getAllUsers(page, size);
-    }
-
-    @PostMapping(value = "/upload")
-    public Response defaultUpload(@RequestParam("file")MultipartFile file){
-        DefaultFile returnFile = null;
-        Response response = new Response();
-        try{
-            DefaultFile f = new DefaultFile(file.getOriginalFilename(), file.getContentType(), file.getSize(), new Binary(file.getBytes()));
-            returnFile = defaultFileService.save(f);
-            if(!ObjectUtils.isEmpty(returnFile)){
-                Map<String, Object> map = new HashMap<>();
-                map.put("result", "upload success");
-                return response.success(map);
-            }else{
-                return response.failure();
-            }
-        }catch (IOException e){
-            e.printStackTrace();
-            return response.failure();
-        }
     }
 
     @PostMapping(value = "/createAuthority")
     public Response createAuthority(@RequestParam("authorityName")String authorityName){
+        /** 
+        * @Description:  管理员创建新角色
+        * @Param: [authorityName] 
+        * @return: com.example.bookmanagementsystem.utils.Response 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
        Boolean result = authorityService.createAuthority(authorityName);
        Response response = new Response();
        if(result){
@@ -76,6 +74,13 @@ public class AdminController {
 
     @PostMapping(value = "/removeAuthority")
     public Response removeAuthority(@RequestParam("authorityName")String authorityName){
+        /** 
+        * @Description: 管理员删除角色 
+        * @Param: [authorityName] 
+        * @return: com.example.bookmanagementsystem.utils.Response 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         Boolean result = authorityService.removeAuthority(authorityName);
         Response response = new Response();
         if(result){
@@ -89,6 +94,13 @@ public class AdminController {
 
     @PostMapping(value = "/addAuthorityToUser")
     public Response addAuthorityToUser(AuthorityDTO authorityDTO){
+        /** 
+        * @Description: 管理员为用户添加角色权限 
+        * @Param: [authorityDTO] 
+        * @return: com.example.bookmanagementsystem.utils.Response 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         Boolean tag = authorityService.addAuthority(authorityDTO);
         Response response = new Response();
         if(tag){
@@ -102,6 +114,13 @@ public class AdminController {
 
     @PostMapping(value = "/removeAuthorityFromUser")
     public Response removeAuthorityFromUser(AuthorityDTO authorityDTO){
+        /** 
+        * @Description: 管理员为用户删除角色权限 
+        * @Param: [authorityDTO] 
+        * @return: com.example.bookmanagementsystem.utils.Response 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         Boolean tag = authorityService.removeAuthority(authorityDTO);
         Response response = new Response();
         if(tag){
@@ -115,6 +134,13 @@ public class AdminController {
 
     @PostMapping(value = "/activeUser")
     public Response activeUser(String username){
+        /** 
+        * @Description: 管理员激活用户 
+        * @Param: [username] 
+        * @return: com.example.bookmanagementsystem.utils.Response 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         Boolean result = basicUserService.activeUser(username);
         Response response = new Response();
         if(result){
@@ -128,6 +154,13 @@ public class AdminController {
 
     @PostMapping(value = "/removeUser")
     public Response removeUser(Long userId){
+        /** 
+        * @Description: 管理员删除用户 
+        * @Param: [userId] 
+        * @return: com.example.bookmanagementsystem.utils.Response 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         Boolean tag = basicUserService.removeUserById(userId);
         Response response = new Response();
         if(tag){

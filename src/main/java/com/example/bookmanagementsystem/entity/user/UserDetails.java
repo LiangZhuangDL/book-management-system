@@ -1,7 +1,7 @@
-package com.example.bookmanagementsystem.entity.authentication;
+package com.example.bookmanagementsystem.entity.user;
 
 import com.example.bookmanagementsystem.entity.BasicEntity;
-
+import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import javax.persistence.*;
 import java.util.Date;
 
