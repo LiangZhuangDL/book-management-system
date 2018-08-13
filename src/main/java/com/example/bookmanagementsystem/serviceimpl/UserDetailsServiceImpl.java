@@ -3,6 +3,7 @@ package com.example.bookmanagementsystem.serviceimpl;
 import com.example.bookmanagementsystem.dto.AddressDTO;
 import com.example.bookmanagementsystem.dto.UserDetailsDTO;
 import com.example.bookmanagementsystem.entity.authentication.BasicUser;
+import com.example.bookmanagementsystem.entity.user.Address;
 import com.example.bookmanagementsystem.entity.user.UserDetails;
 import com.example.bookmanagementsystem.repository.BasicUserRepository;
 import com.example.bookmanagementsystem.repository.UserDetailsRepository;
@@ -58,7 +59,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         * @return: com.example.bookmanagementsystem.entity.user.UserDetails 
         * @Author: Simon Zhuang
         * @Date: 2018/8/13 
-        **/ 
+        **/
+        Address address = addressDTO.convert(addressDTO);
+        UserDetails userDetails = userDetailsDTO.convert(userDetailsDTO);
+        userDetails.setAddress(address);
         return null;
     }
 }
