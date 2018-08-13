@@ -1,12 +1,16 @@
 package com.example.bookmanagementsystem.dto;
 
+import com.example.bookmanagementsystem.entity.user.Address;
+import com.example.bookmanagementsystem.utils.DTOConvert;
+import org.springframework.beans.BeanUtils;
+
 /**
  * @program: book-management-system
  * @description: 地址DTO类
  * @author: Simon Zhuang
  * @create: 2018-08-13 16:22
  **/
-public class AddressDTO {
+public class AddressDTO implements DTOConvert<Address, AddressDTO> {
 
     private String country;
 
@@ -78,5 +82,12 @@ public class AddressDTO {
         this.district = district;
         this.details = details;
         this.isMunicipality = isMunicipality;
+    }
+
+    @Override
+    public Address convert(AddressDTO addressDTO) {
+        Address address = new Address();
+        BeanUtils.copyProperties(addressDTO, address);
+        return address;
     }
 }

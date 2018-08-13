@@ -52,6 +52,13 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails save(UserDetailsDTO userDetailsDTO, AddressDTO addressDTO) {
+        /** 
+        * @Description: 保存用户详细信息
+        * @Param: [userDetailsDTO, addressDTO] 
+        * @return: com.example.bookmanagementsystem.entity.user.UserDetails 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         return null;
     }
 }

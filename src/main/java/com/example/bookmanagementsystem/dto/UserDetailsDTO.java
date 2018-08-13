@@ -1,5 +1,9 @@
 package com.example.bookmanagementsystem.dto;
 
+import com.example.bookmanagementsystem.entity.user.UserDetails;
+import com.example.bookmanagementsystem.utils.DTOConvert;
+import org.springframework.beans.BeanUtils;
+
 import java.util.Date;
 
 /**
@@ -8,7 +12,7 @@ import java.util.Date;
  * @author: Simon Zhuang
  * @create: 2018-08-13 16:12
  **/
-public class UserDetailsDTO {
+public class UserDetailsDTO implements DTOConvert<UserDetails, UserDetailsDTO> {
 
     private String realName;
 
@@ -91,5 +95,12 @@ public class UserDetailsDTO {
         this.cellphone = cellphone;
         this.birthday = birthday;
         this.zipCode = zipCode;
+    }
+
+    @Override
+    public UserDetails convert(UserDetailsDTO userDetailsDTO) {
+        UserDetails userDetails = new UserDetails();
+        BeanUtils.copyProperties(userDetailsDTO, userDetails);
+        return userDetails;
     }
 }
