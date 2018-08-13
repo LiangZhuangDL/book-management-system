@@ -5,7 +5,7 @@ import com.example.bookmanagementsystem.utils.DTOConvert;
 import org.springframework.beans.BeanUtils;
 /**
  * @program: book-management-system
- * @description: 用户注册DTO
+ * @description: 用户注册DTO类
  * @author: Simon Zhuang
  * @create: 2018-08-13 11:51
  **/

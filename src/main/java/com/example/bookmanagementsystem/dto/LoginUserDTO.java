@@ -6,7 +6,7 @@ import org.springframework.beans.BeanUtils;
 
 /**
  * @program: book-management-system
- * @description: 用户登录DTO
+ * @description: 用户登录DTO类
  * @author: Simon Zhuang
  * @create: 2018-08-13 11:51
  **/

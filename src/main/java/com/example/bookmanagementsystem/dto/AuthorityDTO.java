@@ -2,7 +2,7 @@ package com.example.bookmanagementsystem.dto;
 
 /**
  * @program: book-management-system
- * @description: 角色DTO
+ * @description: 角色DTO类
  * @author: Simon Zhuang
  * @create: 2018-08-13 11:51
  **/

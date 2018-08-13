@@ -5,6 +5,12 @@ import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import javax.persistence.*;
 import java.util.Date;
 
+/**
+ * @program: book-management-system
+ * @description: 用户详情实体类
+ * @author: Simon Zhuang
+ * @create: 2018-08-13 11:51
+ **/
 @Entity
 @Table(name = "user_details")
 public class UserDetails extends BasicEntity {
@@ -39,7 +45,7 @@ public class UserDetails extends BasicEntity {
     private String zipCode;
 
     @Column
-    private Boolean isDelete;
+    private Boolean isDelete = false;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_details_basic_user", joinColumns = @JoinColumn(name = "user_details_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "basic_user_id", referencedColumnName = "id"))

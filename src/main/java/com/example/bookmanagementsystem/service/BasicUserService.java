@@ -16,4 +16,6 @@ public interface BasicUserService {
     Boolean activeUser(String username);
 
     Page<BasicUser> getAllUsers(Integer page, Integer size);
+
+    BasicUser findBasicUserByUsername(String username);
 }

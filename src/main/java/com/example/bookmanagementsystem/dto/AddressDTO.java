@@ -1,43 +1,24 @@
-package com.example.bookmanagementsystem.entity.user;
-
-import com.example.bookmanagementsystem.entity.BasicEntity;
-
-import javax.persistence.*;
+package com.example.bookmanagementsystem.dto;
 
 /**
  * @program: book-management-system
- * @description: 地址实体类
+ * @description: 地址DTO类
  * @author: Simon Zhuang
- * @create: 2018-08-13 11:51
+ * @create: 2018-08-13 16:22
  **/
-@Entity
-@Table(name = "address")
-public class Address extends BasicEntity {
+public class AddressDTO {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column
     private String country;
 
-    @Column
     private String province;
 
-    @Column
     private String city;
 
-    @Column
     private String district;
 
-    @Column
     private String details;
 
-    @Column
     private Boolean isMunicipality;
-
-    @Column
-    private Boolean isDelete = false;
 
     public String getCountry() {
         return country;
@@ -87,24 +68,15 @@ public class Address extends BasicEntity {
         isMunicipality = municipality;
     }
 
-    public Boolean getDelete() {
-        return isDelete;
+    public AddressDTO() {
     }
 
-    public void setDelete(Boolean delete) {
-        isDelete = delete;
-    }
-
-    public Address() {
-    }
-
-    public Address(String country, String province, String city, String district, String details, Boolean isMunicipality, Boolean isDelete) {
+    public AddressDTO(String country, String province, String city, String district, String details, Boolean isMunicipality) {
         this.country = country;
         this.province = province;
         this.city = city;
         this.district = district;
         this.details = details;
         this.isMunicipality = isMunicipality;
-        this.isDelete = isDelete;
     }
 }

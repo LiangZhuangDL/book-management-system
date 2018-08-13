@@ -72,4 +72,16 @@ public class BasicUserServiceImpl implements BasicUserService {
         Pageable pageable = PageRequest.of(page, size);
         return basicUserRepository.findAll(pageable);
     }
+
+    @Override
+    public BasicUser findBasicUserByUsername(String username) {
+        /** 
+        * @Description: 根据用户名查找用户基本信息实体 
+        * @Param: [username] 
+        * @return: com.example.bookmanagementsystem.entity.authentication.BasicUser 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
+        return basicUserRepository.findBasicUserByUsername(username);
+    }
 }
