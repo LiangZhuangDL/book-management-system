@@ -7,6 +7,12 @@ import javax.persistence.Id;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * @program: book-management-system
+ * @description: 文件实体类
+ * @author: Simon Zhuang
+ * @create: 2018-08-13 11:51
+ **/
 @Document
 public class DefaultFile {
     @Id

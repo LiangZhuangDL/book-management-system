@@ -4,7 +4,6 @@ import com.example.bookmanagementsystem.entity.authentication.Authority;
 import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import com.example.bookmanagementsystem.repository.AuthorityRepository;
 import com.example.bookmanagementsystem.repository.BasicUserRepository;
-import com.example.bookmanagementsystem.service.MailService;
 import com.example.bookmanagementsystem.service.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,7 +13,12 @@ import org.springframework.util.ObjectUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * @program: book-management-system
+ * @description: 注册业务实现类
+ * @author: Simon Zhuang
+ * @create: 2018-08-13 11:51
+ **/
 @Service
 public class RegisterServiceImpl implements RegisterService {
 
@@ -26,11 +30,25 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     public String isLogin() {
+        /** 
+        * @Description: 判断是否登录 
+        * @Param: [] 
+        * @return: java.lang.String 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
     @Override
     public Boolean save(BasicUser basicUser) {
+        /** 
+        * @Description: 保存用户基本信息 
+        * @Param: [basicUser] 
+        * @return: java.lang.Boolean 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         BasicUser user = basicUserRepository.findBasicUserByUsername(basicUser.getUsername());
         if(ObjectUtils.isEmpty(user)){
             List<Authority> authorities = new ArrayList<>();
@@ -57,6 +75,13 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     public Boolean update(BasicUser basicUser) {
+        /** 
+        * @Description: 更新用户基本信息 
+        * @Param: [basicUser] 
+        * @return: java.lang.Boolean 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
        BasicUser result = basicUserRepository.save(basicUser);
         if(ObjectUtils.isEmpty(result)){
             return false;
@@ -67,6 +92,13 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     public Boolean activeUser(String activeCode) {
+        /** 
+        * @Description: 激活账号 
+        * @Param: [activeCode] 
+        * @return: java.lang.Boolean 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         BasicUser user = basicUserRepository.findBasicUserByActiveCode(activeCode);
         if(!ObjectUtils.isEmpty(user) && !user.isEnabled()){
             user.setEnabled(true);

@@ -13,6 +13,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @program: book-management-system
+ * @description: 注销成功控制器
+ * @author: Simon Zhuang
+ * @create: 2018-08-13 11:51
+ **/
 @Component
 public class SelfLogoutSuccessHandler implements LogoutSuccessHandler {
 
@@ -20,7 +26,7 @@ public class SelfLogoutSuccessHandler implements LogoutSuccessHandler {
     public void onLogoutSuccess(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Authentication authentication) throws IOException, ServletException {
         Response response = new Response();
         Map<String,Object> map = new HashMap<>();
-        map.put("status", "logout success");
+        map.put("status", "注销失败");
         httpServletResponse.getWriter().write(new Gson().toJson(response.success(map)));
     }
 }

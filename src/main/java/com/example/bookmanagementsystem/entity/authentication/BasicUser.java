@@ -9,6 +9,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * @program: book-management-system
+ * @description: 用户基本信息实体类
+ * @author: Simon Zhuang
+ * @create: 2018-08-13 11:51
+ **/
 @Entity
 @Table(name = "basic_user")
 public class BasicUser extends BasicEntity implements UserDetails {

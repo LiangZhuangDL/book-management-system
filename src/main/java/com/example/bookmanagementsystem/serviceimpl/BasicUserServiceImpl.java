@@ -10,6 +10,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+/**
+ * @program: book-management-system
+ * @description: 用户基础信息业务实现类
+ * @author: Simon Zhuang
+ * @create: 2018-08-13 11:51
+ **/
 @Service
 public class BasicUserServiceImpl implements BasicUserService {
 
@@ -18,6 +24,13 @@ public class BasicUserServiceImpl implements BasicUserService {
 
     @Override
     public Boolean removeUserById(Long id) {
+        /** 
+        * @Description: 根据用户ID删除用户（浅删除） 
+        * @Param: [id] 
+        * @return: java.lang.Boolean 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         BasicUser basicUser = basicUserRepository.findBasicUserById(id);
         if(!ObjectUtils.isEmpty(basicUser)){
             basicUser.setDelete(true);
@@ -30,6 +43,13 @@ public class BasicUserServiceImpl implements BasicUserService {
 
     @Override
     public Boolean activeUser(String username) {
+        /** 
+        * @Description: 根据用户名激活用户 
+        * @Param: [username] 
+        * @return: java.lang.Boolean 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         BasicUser basicUser = basicUserRepository.findBasicUserByUsernameAndIsDelete(username, true);
         if(!ObjectUtils.isEmpty(basicUser)){
             basicUser.setDelete(false);
@@ -42,6 +62,13 @@ public class BasicUserServiceImpl implements BasicUserService {
 
     @Override
     public Page<BasicUser> getAllUsers(Integer page, Integer size) {
+        /** 
+        * @Description: 分页查询所有用户基本信息 
+        * @Param: [page, size] 
+        * @return: org.springframework.data.domain.Page<com.example.bookmanagementsystem.entity.authentication.BasicUser> 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         Pageable pageable = PageRequest.of(page, size);
         return basicUserRepository.findAll(pageable);
     }

@@ -1,5 +1,11 @@
 package com.example.bookmanagementsystem.dto;
 
+/**
+ * @program: book-management-system
+ * @description: 角色DTO
+ * @author: Simon Zhuang
+ * @create: 2018-08-13 11:51
+ **/
 public class AuthorityDTO {
     private Long userId;
 

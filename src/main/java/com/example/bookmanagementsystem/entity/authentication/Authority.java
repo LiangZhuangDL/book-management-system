@@ -5,6 +5,12 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 
+/**
+ * @program: book-management-system
+ * @description: 角色实体类
+ * @author: Simon Zhuang
+ * @create: 2018-08-13 11:51
+ **/
 @Entity
 @Table(name = "authority")
 public class Authority extends BasicEntity implements GrantedAuthority {

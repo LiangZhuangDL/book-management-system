@@ -5,6 +5,12 @@ import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 
+/**
+ * @program: book-management-system
+ * @description: Mailgun设置类
+ * @author: Simon Zhuang
+ * @create: 2018-08-13 11:51
+ **/
 public class Mailgun {
 
     private static final String YOUR_DOMAIN_NAME = "sandboxad81d84d11954e63ad5ef4b945e3606d.mailgun.org";

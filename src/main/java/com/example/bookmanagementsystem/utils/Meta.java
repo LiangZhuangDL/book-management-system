@@ -1,5 +1,11 @@
 package com.example.bookmanagementsystem.utils;
 
+/**
+ * @program: book-management-system
+ * @description: 数据源实体类
+ * @author: Simon Zhuang
+ * @create: 2018-08-13 11:51
+ **/
 public class Meta {
 
     private Boolean success;

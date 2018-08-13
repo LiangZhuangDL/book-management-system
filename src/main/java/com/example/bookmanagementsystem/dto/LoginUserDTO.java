@@ -4,6 +4,12 @@ import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import com.example.bookmanagementsystem.utils.DTOConvert;
 import org.springframework.beans.BeanUtils;
 
+/**
+ * @program: book-management-system
+ * @description: 用户登录DTO
+ * @author: Simon Zhuang
+ * @create: 2018-08-13 11:51
+ **/
 public class LoginUserDTO implements DTOConvert<BasicUser, LoginUserDTO> {
 
     private String username;

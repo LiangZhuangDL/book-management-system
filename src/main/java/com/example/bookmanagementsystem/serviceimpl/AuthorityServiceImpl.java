@@ -14,7 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import java.util.List;
 
-
+/**
+ * @program: book-management-system
+ * @description: 角色业务实现类
+ * @author: Simon Zhuang
+ * @create: 2018-08-13 11:51
+ **/
 @Service
 public class AuthorityServiceImpl implements AuthorityService {
 
@@ -26,12 +31,26 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public Boolean save(Authority authority) {
+        /** 
+        * @Description: 保存或者更新角色 
+        * @Param: [authority] 
+        * @return: java.lang.Boolean 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         Authority result = authorityRepository.save(authority);
         return !ObjectUtils.isEmpty(result);
     }
 
     @Override
     public Boolean addAuthority(AuthorityDTO authorityDTO) {
+        /** 
+        * @Description: 给用户添加角色权限 
+        * @Param: [authorityDTO] 
+        * @return: java.lang.Boolean 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         BasicUser basicUser = basicUserRepository.findBasicUserById(authorityDTO.getUserId());
         Authority authority = authorityRepository.findAuthorityByName(authorityDTO.getAuthorityName());
         if(!ObjectUtils.isEmpty(authority) && !ObjectUtils.isEmpty(basicUser)){
@@ -57,6 +76,13 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public Boolean removeAuthority(AuthorityDTO authorityDTO) {
+        /** 
+        * @Description: 给用户删除角色权限 
+        * @Param: [authorityDTO] 
+        * @return: java.lang.Boolean 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         BasicUser basicUser = basicUserRepository.findBasicUserById(authorityDTO.getUserId());
         Authority authority = authorityRepository.findAuthorityByName(authorityDTO.getAuthorityName());
         if(!ObjectUtils.isEmpty(authority) && !ObjectUtils.isEmpty(basicUser)) {
@@ -82,6 +108,13 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public Boolean createAuthority(String authorityName) {
+        /** 
+        * @Description: 创建新角色到角色列表 
+        * @Param: [authorityName] 
+        * @return: java.lang.Boolean 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         Authority authority = authorityRepository.findAuthorityByName(authorityName);
         if(ObjectUtils.isEmpty(authority)){
             Authority auth = new Authority(authorityName);
@@ -93,6 +126,13 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public Boolean removeAuthority(String authorityName) {
+        /** 
+        * @Description: 从角色列表删除角色 
+        * @Param: [authorityName] 
+        * @return: java.lang.Boolean 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         Authority authority = authorityRepository.findAuthorityByName(authorityName);
         if(!ObjectUtils.isEmpty(authority)){
             authority.setDelete(true);
@@ -104,6 +144,13 @@ public class AuthorityServiceImpl implements AuthorityService {
 
     @Override
     public Page<Authority> getAllAuthorities(Integer page, Integer size) {
+        /** 
+        * @Description: 分页获取角色列表 
+        * @Param: [page, size] 
+        * @return: org.springframework.data.domain.Page<com.example.bookmanagementsystem.entity.authentication.Authority> 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/13 
+        **/ 
         Pageable pageable = PageRequest.of(page, size);
         return authorityRepository.findAll(pageable);
     }

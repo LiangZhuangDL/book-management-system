@@ -11,7 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
+/**
+ * @program: book-management-system
+ * @description: 认证失败控制器
+ * @author: Simon Zhuang
+ * @create: 2018-08-13 11:51
+ **/
 @Component
 public class SelfAuthenticationFailureHandler implements AuthenticationFailureHandler {
     @Override

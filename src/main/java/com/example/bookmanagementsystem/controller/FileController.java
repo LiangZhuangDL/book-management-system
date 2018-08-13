@@ -16,6 +16,12 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @program: book-management-system
+ * @description: 文件控制器
+ * @author: Simon Zhuang
+ * @create: 2018-08-13 11:51
+ **/
 @RestController
 @RequestMapping(value = "/file")
 public class FileController {
