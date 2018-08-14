@@ -1,4 +1,4 @@
-package com.example.bookmanagementsystem.repository;
+package com.example.bookmanagementsystem.repository.anthentication;
 
 import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import org.springframework.data.jpa.repository.JpaRepository;

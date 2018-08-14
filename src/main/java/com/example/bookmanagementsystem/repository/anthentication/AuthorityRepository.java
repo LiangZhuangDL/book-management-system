@@ -1,4 +1,4 @@
-package com.example.bookmanagementsystem.repository;
+package com.example.bookmanagementsystem.repository.anthentication;
 
 import com.example.bookmanagementsystem.entity.authentication.Authority;
 import org.springframework.data.domain.Page;

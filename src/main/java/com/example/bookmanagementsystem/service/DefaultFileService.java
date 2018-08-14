@@ -1,6 +1,6 @@
 package com.example.bookmanagementsystem.service;
 
-import com.example.bookmanagementsystem.entity.DefaultFile;
+import com.example.bookmanagementsystem.entity.file.DefaultFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;

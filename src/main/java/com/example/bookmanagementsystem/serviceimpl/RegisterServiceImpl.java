@@ -2,8 +2,8 @@ package com.example.bookmanagementsystem.serviceimpl;
 
 import com.example.bookmanagementsystem.entity.authentication.Authority;
 import com.example.bookmanagementsystem.entity.authentication.BasicUser;
-import com.example.bookmanagementsystem.repository.AuthorityRepository;
-import com.example.bookmanagementsystem.repository.BasicUserRepository;
+import com.example.bookmanagementsystem.repository.anthentication.AuthorityRepository;
+import com.example.bookmanagementsystem.repository.anthentication.BasicUserRepository;
 import com.example.bookmanagementsystem.service.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;

@@ -1,6 +1,6 @@
 package com.example.bookmanagementsystem.controller;
 
-import com.example.bookmanagementsystem.entity.DefaultFile;
+import com.example.bookmanagementsystem.entity.file.DefaultFile;
 import com.example.bookmanagementsystem.service.DefaultFileService;
 import com.example.bookmanagementsystem.utils.Response;
 import org.bson.types.Binary;

@@ -1,4 +1,4 @@
-package com.example.bookmanagementsystem.repository;
+package com.example.bookmanagementsystem.repository.user;
 
 import com.example.bookmanagementsystem.entity.user.Address;
 import org.springframework.data.jpa.repository.JpaRepository;

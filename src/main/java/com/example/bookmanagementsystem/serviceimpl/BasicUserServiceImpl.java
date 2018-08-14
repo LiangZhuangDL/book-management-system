@@ -1,7 +1,7 @@
 package com.example.bookmanagementsystem.serviceimpl;
 
 import com.example.bookmanagementsystem.entity.authentication.BasicUser;
-import com.example.bookmanagementsystem.repository.BasicUserRepository;
+import com.example.bookmanagementsystem.repository.anthentication.BasicUserRepository;
 import com.example.bookmanagementsystem.service.BasicUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
