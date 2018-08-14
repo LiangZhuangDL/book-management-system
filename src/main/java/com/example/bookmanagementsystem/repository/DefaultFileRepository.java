@@ -1,6 +1,6 @@
 package com.example.bookmanagementsystem.repository;
 
-import com.example.bookmanagementsystem.entity.book.DefaultFile;
+import com.example.bookmanagementsystem.entity.DefaultFile;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**

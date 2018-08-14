@@ -1,7 +1,7 @@
 package com.example.bookmanagementsystem.serviceimpl;
 
 import com.example.bookmanagementsystem.entity.authentication.BasicUser;
-import com.example.bookmanagementsystem.entity.book.DefaultFile;
+import com.example.bookmanagementsystem.entity.DefaultFile;
 import com.example.bookmanagementsystem.entity.user.UserDetails;
 import com.example.bookmanagementsystem.enums.DefaultAvatarEnum;
 import com.example.bookmanagementsystem.repository.BasicUserRepository;
@@ -43,7 +43,7 @@ public class DefaultFileServiceImpl implements DefaultFileService {
         /**
         * @Description: 保存文件到MongoDB文件数据库
         * @Param: [defaultFile]
-        * @return: com.example.bookmanagementsystem.entity.book.DefaultFile
+        * @return: com.example.bookmanagementsystem.entity.DefaultFile
         * @Author: Simon Zhuang
         * @Date: 2018/8/13
         **/

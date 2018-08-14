@@ -2,21 +2,17 @@ package com.example.bookmanagementsystem.controller;
 
 import com.example.bookmanagementsystem.dto.AddressDTO;
 import com.example.bookmanagementsystem.dto.UserDetailsDTO;
-import com.example.bookmanagementsystem.entity.book.DefaultFile;
 import com.example.bookmanagementsystem.entity.user.UserDetails;
 import com.example.bookmanagementsystem.enums.DefaultAvatarEnum;
 import com.example.bookmanagementsystem.service.DefaultFileService;
 import com.example.bookmanagementsystem.service.UserDetailsService;
 import com.example.bookmanagementsystem.utils.Response;
-import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.text.ParseException;
-import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 

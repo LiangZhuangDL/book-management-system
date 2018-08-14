@@ -1,4 +1,4 @@
-package com.example.bookmanagementsystem.entity.book;
+package com.example.bookmanagementsystem.entity;
 
 import org.bson.types.Binary;
 import org.springframework.data.mongodb.core.mapping.Document;
