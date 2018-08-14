@@ -1,10 +1,16 @@
 package com.example.bookmanagementsystem.serviceimpl;
 
+import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import com.example.bookmanagementsystem.entity.book.DefaultFile;
+import com.example.bookmanagementsystem.entity.user.UserDetails;
+import com.example.bookmanagementsystem.enums.DefaultAvatarEnum;
+import com.example.bookmanagementsystem.repository.BasicUserRepository;
 import com.example.bookmanagementsystem.repository.DefaultFileRepository;
+import com.example.bookmanagementsystem.repository.UserDetailsRepository;
 import com.example.bookmanagementsystem.service.DefaultFileService;
 import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,6 +31,12 @@ public class DefaultFileServiceImpl implements DefaultFileService {
 
     @Autowired
     private DefaultFileRepository defaultFileRepository;
+
+    @Autowired
+    private BasicUserRepository basicUserRepository;
+
+    @Autowired
+    private UserDetailsRepository userDetailsRepository;
 
     @Override
     public DefaultFile save(DefaultFile defaultFile) {
@@ -68,6 +80,42 @@ public class DefaultFileServiceImpl implements DefaultFileService {
             e.printStackTrace();
             map.put("success", false);
             return map;
+        }
+    }
+
+    @Override
+    public String findAvatarBase64ById(String id) {
+        /**
+        * @Description: 通过文件ID返回头像图片的Base64码，根据用户性别返回头像
+        * @Param: [id]
+        * @return: java.lang.String
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/14
+        **/
+        DefaultFile returnFile = defaultFileRepository.findDefaultFileById(id);
+        if(ObjectUtils.isEmpty(returnFile)){
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            BasicUser basicUser = basicUserRepository.findBasicUserByUsername(username);
+            if(!ObjectUtils.isEmpty(basicUser)){
+                UserDetails userDetails = userDetailsRepository.findUserDetailsByBasicUser(basicUser);
+                if(!ObjectUtils.isEmpty(userDetails)){
+                    Boolean sex = userDetails.getSex();
+                    if(sex){
+                        return DefaultAvatarEnum.MALE.getAvatar();
+                    }else {
+                        return DefaultAvatarEnum.FEMAILE.getAvatar();
+                    }
+                }else{
+                    return DefaultAvatarEnum.UNKNOW.getAvatar();
+                }
+            }else {
+                return DefaultAvatarEnum.UNKNOW.getAvatar();
+            }
+        }else{
+            Base64.Encoder encoder = Base64.getEncoder();
+            String text = encoder.encodeToString(returnFile.getContent().getData()).replaceAll("\n","");
+            String image = "data:image/jpeg;base64," + text;
+            return image;
         }
     }
 }

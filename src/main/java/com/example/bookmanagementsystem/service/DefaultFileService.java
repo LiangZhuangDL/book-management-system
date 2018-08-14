@@ -16,4 +16,6 @@ public interface DefaultFileService {
     DefaultFile save(DefaultFile defaultFile);
 
     Map<String, Object> uploadAvatar(MultipartFile file);
+
+    String findAvatarBase64ById(String id);
 }

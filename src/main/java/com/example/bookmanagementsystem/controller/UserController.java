@@ -4,6 +4,7 @@ import com.example.bookmanagementsystem.dto.AddressDTO;
 import com.example.bookmanagementsystem.dto.UserDetailsDTO;
 import com.example.bookmanagementsystem.entity.book.DefaultFile;
 import com.example.bookmanagementsystem.entity.user.UserDetails;
+import com.example.bookmanagementsystem.enums.DefaultAvatarEnum;
 import com.example.bookmanagementsystem.service.DefaultFileService;
 import com.example.bookmanagementsystem.service.UserDetailsService;
 import com.example.bookmanagementsystem.utils.Response;
@@ -47,18 +48,28 @@ public class UserController {
         Response response = new Response();
         UserDetails userDetails = userDetailsService.getCurrentUserDetails();
         if(!ObjectUtils.isEmpty(userDetails)){
+            String avatarBase64 = defaultFileService.findAvatarBase64ById(userDetails.getAvatar());
             Map<String, Object> map = new HashMap<>();
             map.put("data", userDetails);
+            map.put("image", avatarBase64);
             return response.success(map);
         }else{
             Map<String, Object> map = new HashMap<>();
             map.put("data", userDetails);
+            map.put("image", DefaultAvatarEnum.UNKNOW.getAvatar());
             return response.success(map);
         }
     }
 
     @PostMapping(value = "/save")
     public Response saveUserDetails(UserDetailsDTO userDetailsDTO, AddressDTO addressDTO) throws ParseException {
+        /** 
+        * @Description: 保存用户详细信息 
+        * @Param: [userDetailsDTO, addressDTO] 
+        * @return: com.example.bookmanagementsystem.utils.Response 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/14 
+        **/ 
         UserDetails userDetails = userDetailsService.save(userDetailsDTO, addressDTO);
         Response response = new Response();
         if(!ObjectUtils.isEmpty(userDetails)){
