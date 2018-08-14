@@ -24,7 +24,7 @@ public class UserDetailsDTO implements DTOConvert<UserDetails, UserDetailsDTO> {
 
     private String cellphone;
 
-    private Date birthday;
+    private String birthday;
 
     private String zipCode;
 
@@ -68,11 +68,11 @@ public class UserDetailsDTO implements DTOConvert<UserDetails, UserDetailsDTO> {
         this.cellphone = cellphone;
     }
 
-    public Date getBirthday() {
+    public String getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(Date birthday) {
+    public void setBirthday(String birthday) {
         this.birthday = birthday;
     }
 
@@ -87,7 +87,7 @@ public class UserDetailsDTO implements DTOConvert<UserDetails, UserDetailsDTO> {
     public UserDetailsDTO() {
     }
 
-    public UserDetailsDTO(String realName, Boolean sex, String idCardNumber, String telephone, String cellphone, Date birthday, String zipCode) {
+    public UserDetailsDTO(String realName, Boolean sex, String idCardNumber, String telephone, String cellphone, String birthday, String zipCode) {
         this.realName = realName;
         this.sex = sex;
         this.idCardNumber = idCardNumber;

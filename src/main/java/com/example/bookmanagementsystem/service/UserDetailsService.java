@@ -4,6 +4,8 @@ import com.example.bookmanagementsystem.dto.AddressDTO;
 import com.example.bookmanagementsystem.dto.UserDetailsDTO;
 import com.example.bookmanagementsystem.entity.user.UserDetails;
 
+import java.text.ParseException;
+
 /**
  * @program: book-management-system
  * @description: 用户详情业务接口
@@ -14,5 +16,5 @@ public interface UserDetailsService {
 
     UserDetails getCurrentUserDetails();
 
-    UserDetails save(UserDetailsDTO userDetailsDTO, AddressDTO addressDTO);
+    UserDetails save(UserDetailsDTO userDetailsDTO, AddressDTO addressDTO) throws ParseException;
 }

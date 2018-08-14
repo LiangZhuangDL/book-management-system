@@ -5,6 +5,7 @@ import com.example.bookmanagementsystem.dto.UserDetailsDTO;
 import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import com.example.bookmanagementsystem.entity.user.Address;
 import com.example.bookmanagementsystem.entity.user.UserDetails;
+import com.example.bookmanagementsystem.repository.AddressRepository;
 import com.example.bookmanagementsystem.repository.BasicUserRepository;
 import com.example.bookmanagementsystem.repository.UserDetailsRepository;
 import com.example.bookmanagementsystem.service.UserDetailsService;
@@ -12,6 +13,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import java.text.ParseException;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * @program: book-management-system
@@ -28,6 +33,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private BasicUserRepository basicUserRepository;
 
+    @Autowired
+    private AddressRepository addressRepository;
+
     @Override
     public UserDetails getCurrentUserDetails() {
         /**
@@ -41,8 +49,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if(!username.equals("anonymousUser")){
             BasicUser basicUser = basicUserRepository.findBasicUserByUsername(username);
             if(!ObjectUtils.isEmpty(basicUser)){
-                UserDetails userDetails = userDetailsRepository.findUserDetailsByBasicUser(basicUser);
-                return userDetails;
+                return userDetailsRepository.findUserDetailsByBasicUser(basicUser);
             }else {
                 return new UserDetails();
             }
@@ -52,7 +59,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     @Override
-    public UserDetails save(UserDetailsDTO userDetailsDTO, AddressDTO addressDTO) {
+    public UserDetails save(UserDetailsDTO userDetailsDTO, AddressDTO addressDTO) throws ParseException {
         /** 
         * @Description: 保存用户详细信息
         * @Param: [userDetailsDTO, addressDTO] 
@@ -61,8 +68,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         * @Date: 2018/8/13 
         **/
         Address address = addressDTO.convert(addressDTO);
-        UserDetails userDetails = userDetailsDTO.convert(userDetailsDTO);
-        userDetails.setAddress(address);
-        return null;
+        Address result = addressRepository.save(address);
+        if(ObjectUtils.isEmpty(result)){
+            UserDetails userDetails = userDetailsDTO.convert(userDetailsDTO);
+            userDetails.setAddress(result);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            ParsePosition parsePosition = new ParsePosition(0);
+            Date birthday = dateFormat.parse(userDetailsDTO.getBirthday(), parsePosition);
+            userDetails.setBirthday(birthday);
+            String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+            BasicUser basicUser = basicUserRepository.findBasicUserByUsername(currentUsername);
+            userDetails.setBasicUser(basicUser);
+            return userDetailsRepository.save(userDetails);
+        }else {
+            return new UserDetails();
+        }
     }
 }
