@@ -41,10 +41,22 @@ public class Book extends BasicEntity {
     private Double price;
 
     @Column
-    private Integer number;
+    private Integer quantity;
 
     @Column
-    private Integer leftNumber;
+    private Integer leftQuantity;
+
+    @Column
+    private String number;
+
+    @Column
+    private Date borrowedDate;
+
+    @Column
+    private Integer maxHoldingDays;
+
+    @Column
+    private Boolean isRenew = false;
 
     @Column
     private Boolean isDelete = false;
@@ -113,20 +125,44 @@ public class Book extends BasicEntity {
         this.price = price;
     }
 
-    public Integer getNumber() {
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public Integer getLeftQuantity() {
+        return leftQuantity;
+    }
+
+    public void setLeftQuantity(Integer leftQuantity) {
+        this.leftQuantity = leftQuantity;
+    }
+
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(Integer number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 
-    public Integer getLeftNumber() {
-        return leftNumber;
+    public Date getBorrowedDate() {
+        return borrowedDate;
     }
 
-    public void setLeftNumber(Integer leftNumber) {
-        this.leftNumber = leftNumber;
+    public void setBorrowedDate(Date borrowedDate) {
+        this.borrowedDate = borrowedDate;
+    }
+
+    public Integer getMaxHoldingDays() {
+        return maxHoldingDays;
+    }
+
+    public void setMaxHoldingDays(Integer maxHoldingDays) {
+        this.maxHoldingDays = maxHoldingDays;
     }
 
     public BookBasicType getBookBasicType() {
@@ -145,6 +181,14 @@ public class Book extends BasicEntity {
         this.bookShelf = bookShelf;
     }
 
+    public Boolean getRenew() {
+        return isRenew;
+    }
+
+    public void setRenew(Boolean renew) {
+        isRenew = renew;
+    }
+
     public Boolean getDelete() {
         return isDelete;
     }
@@ -156,7 +200,7 @@ public class Book extends BasicEntity {
     public Book() {
     }
 
-    public Book(String title, String author, String isbn, String publishingHouse, Date publishedDate, Integer edition, Double price, Integer number, Integer leftNumber, BookBasicType bookBasicType, BookShelf bookShelf) {
+    public Book(String title, String author, String isbn, String publishingHouse, Date publishedDate, Integer edition, Double price, Integer quantity, Integer leftQuantity, String number, Date borrowedDate, Integer maxHoldingDays, BookBasicType bookBasicType, BookShelf bookShelf) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
@@ -164,8 +208,11 @@ public class Book extends BasicEntity {
         this.publishedDate = publishedDate;
         this.edition = edition;
         this.price = price;
+        this.quantity = quantity;
+        this.leftQuantity = leftQuantity;
         this.number = number;
-        this.leftNumber = leftNumber;
+        this.borrowedDate = borrowedDate;
+        this.maxHoldingDays = maxHoldingDays;
         this.bookBasicType = bookBasicType;
         this.bookShelf = bookShelf;
     }

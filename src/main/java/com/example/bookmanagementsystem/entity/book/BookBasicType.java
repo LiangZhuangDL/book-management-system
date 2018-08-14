@@ -24,6 +24,17 @@ public class BookBasicType extends BasicEntity {
     @Column
     private String text;
 
+    @Column
+    private Boolean isDelete = false;
+
+    public Boolean getDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(Boolean delete) {
+        isDelete = delete;
+    }
+
     public String getSign() {
         return sign;
     }
