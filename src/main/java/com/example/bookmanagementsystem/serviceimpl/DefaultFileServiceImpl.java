@@ -114,8 +114,7 @@ public class DefaultFileServiceImpl implements DefaultFileService {
         }else{
             Base64.Encoder encoder = Base64.getEncoder();
             String text = encoder.encodeToString(returnFile.getContent().getData()).replaceAll("\n","");
-            String image = "data:image/jpeg;base64," + text;
-            return image;
+            return "data:image/jpeg;base64," + text;
         }
     }
 }
