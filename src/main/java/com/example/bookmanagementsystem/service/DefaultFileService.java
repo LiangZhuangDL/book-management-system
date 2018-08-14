@@ -1,6 +1,9 @@
 package com.example.bookmanagementsystem.service;
 
 import com.example.bookmanagementsystem.entity.book.DefaultFile;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 /**
  * @program: book-management-system
@@ -11,4 +14,6 @@ import com.example.bookmanagementsystem.entity.book.DefaultFile;
 public interface DefaultFileService {
 
     DefaultFile save(DefaultFile defaultFile);
+
+    Map<String, Object> uploadAvatar(MultipartFile file);
 }

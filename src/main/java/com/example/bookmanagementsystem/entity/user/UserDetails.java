@@ -20,6 +20,9 @@ public class UserDetails extends BasicEntity {
     private Long id;
 
     @Column
+    private String avatar;
+
+    @Column
     private String realName;
 
     @Column
@@ -50,6 +53,14 @@ public class UserDetails extends BasicEntity {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "user_details_basic_user", joinColumns = @JoinColumn(name = "user_details_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "basic_user_id", referencedColumnName = "id"))
     private BasicUser basicUser;
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public String getRealName() {
         return realName;
@@ -134,7 +145,8 @@ public class UserDetails extends BasicEntity {
     public UserDetails() {
     }
 
-    public UserDetails(String realName, Boolean sex, String idCardNumber, String telephone, String cellphone, Date birthday, Address address, String zipCode, Boolean isDelete, BasicUser basicUser) {
+    public UserDetails(String avatar, String realName, Boolean sex, String idCardNumber, String telephone, String cellphone, Date birthday, Address address, String zipCode, Boolean isDelete, BasicUser basicUser) {
+        this.avatar = avatar;
         this.realName = realName;
         this.sex = sex;
         this.idCardNumber = idCardNumber;

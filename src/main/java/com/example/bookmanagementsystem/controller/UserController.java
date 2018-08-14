@@ -2,17 +2,20 @@ package com.example.bookmanagementsystem.controller;
 
 import com.example.bookmanagementsystem.dto.AddressDTO;
 import com.example.bookmanagementsystem.dto.UserDetailsDTO;
+import com.example.bookmanagementsystem.entity.book.DefaultFile;
 import com.example.bookmanagementsystem.entity.user.UserDetails;
+import com.example.bookmanagementsystem.service.DefaultFileService;
 import com.example.bookmanagementsystem.service.UserDetailsService;
 import com.example.bookmanagementsystem.utils.Response;
+import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ObjectUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.text.ParseException;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,6 +31,9 @@ public class UserController {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private DefaultFileService defaultFileService;
     
     @GetMapping(value = "/profile")
     public Response profile(){
@@ -58,6 +64,25 @@ public class UserController {
         if(!ObjectUtils.isEmpty(userDetails)){
             Map<String, Object> map = new HashMap<>();
             map.put("data", userDetails);
+            return response.success(map);
+        }else {
+            return response.failure();
+        }
+    }
+
+    @PostMapping(value = "/uploadAvatar")
+    public Response uploadAvatar(@RequestParam("file") MultipartFile file){
+        /**
+        * @Description: 上传头像图片到文件服务器（AJAX提交）
+        * @Param: [file]
+        * @return: com.example.bookmanagementsystem.utils.Response
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/14
+        **/
+        Response response = new Response();
+        Map<String, Object> map = defaultFileService.uploadAvatar(file);
+        Boolean tag = (Boolean) map.get("success");
+        if(tag){
             return response.success(map);
         }else {
             return response.failure();
