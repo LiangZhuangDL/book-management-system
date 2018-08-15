@@ -56,7 +56,7 @@ public class Book extends BasicEntity {
     private Integer maxHoldingDays;
 
     @Column
-    private Boolean isRenew = false;
+    private Boolean isRenew = false; //是否续借
 
     @Column
     private Boolean isDelete = false;
