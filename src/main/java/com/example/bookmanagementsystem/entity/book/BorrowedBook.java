@@ -39,7 +39,7 @@ public class BorrowedBook extends BasicEntity {
         return maxBorrowedQuantity;
     }
 
-    public void setMaxBorowedQuantity(Integer maxBorrowedQuantity) {
+    public void setMaxBorrowedQuantity(Integer maxBorrowedQuantity) {
         this.maxBorrowedQuantity = maxBorrowedQuantity;
     }
 
