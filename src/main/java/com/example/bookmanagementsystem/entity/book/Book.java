@@ -20,6 +20,9 @@ public class Book extends BasicEntity {
     private Long id;
 
     @Column
+    private String cover;
+
+    @Column
     private String title;
 
     @Column
@@ -68,6 +71,14 @@ public class Book extends BasicEntity {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "book_bookshelf", joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "book_shelf_id", referencedColumnName = "id"))
     private BookShelf bookShelf;
+
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
 
     public String getTitle() {
         return title;
@@ -200,7 +211,8 @@ public class Book extends BasicEntity {
     public Book() {
     }
 
-    public Book(String title, String author, String isbn, String publishingHouse, Date publishedDate, Integer edition, Double price, Integer quantity, Integer leftQuantity, String number, Date borrowedDate, Integer maxHoldingDays, BookBasicType bookBasicType, BookShelf bookShelf) {
+    public Book(String cover, String title, String author, String isbn, String publishingHouse, Date publishedDate, Integer edition, Double price, Integer quantity, Integer leftQuantity, String number, Date borrowedDate, Integer maxHoldingDays, BookBasicType bookBasicType, BookShelf bookShelf) {
+        this.cover = cover;
         this.title = title;
         this.author = author;
         this.isbn = isbn;
