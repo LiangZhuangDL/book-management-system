@@ -10,5 +10,5 @@ public interface BookService {
 
     Map<String, Object> findBooksByPublishinghouseContaining(String publishingHouse);
 
-    Map<String, Object> findBooksByIsbnContaing(String isbn);
+    Map<String, Object> findBooksByIsbnContaining(String isbn);
 }

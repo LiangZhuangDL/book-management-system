@@ -1,8 +1,10 @@
 package com.example.bookmanagementsystem.controller;
 
 import com.example.bookmanagementsystem.dto.AuthorityDTO;
+import com.example.bookmanagementsystem.dto.BookDTO;
 import com.example.bookmanagementsystem.entity.authentication.Authority;
 import com.example.bookmanagementsystem.entity.authentication.BasicUser;
+import com.example.bookmanagementsystem.entity.book.Book;
 import com.example.bookmanagementsystem.service.AuthorityService;
 import com.example.bookmanagementsystem.service.BasicUserService;
 import com.example.bookmanagementsystem.utils.Response;
@@ -170,6 +172,12 @@ public class AdminController {
         }else {
             return response.failure();
         }
+    }
+
+    @PostMapping(value = "/saveBook")
+    public Response saveBook(BookDTO bookDTO){
+        Book book = bookDTO.convert(bookDTO);
+        return null;
     }
 
 }

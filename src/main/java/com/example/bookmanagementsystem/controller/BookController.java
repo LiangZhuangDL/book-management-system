@@ -37,7 +37,7 @@ public class BookController {
         }else if(type.equals(2)){
             map = bookService.findBooksByPublishinghouseContaining(bookSearchDTO.getText());
         }else if(type.equals(3)){
-            map = bookService.findBooksByIsbnContaing(bookSearchDTO.getText());
+            map = bookService.findBooksByIsbnContaining(bookSearchDTO.getText());
         } else {
             return response.failure();
         }

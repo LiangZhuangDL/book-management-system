@@ -19,7 +19,7 @@ public class BookShelf extends BasicEntity {
     private Long id;
 
     @Column
-    private String number;
+    private String shelfNumber;
 
     @Column
     private Integer horizontal;
@@ -36,12 +36,12 @@ public class BookShelf extends BasicEntity {
     @Column
     private Boolean isDelete = false;
 
-    public String getNumber() {
-        return number;
+    public String getShelfNumber() {
+        return shelfNumber;
     }
 
-    public void setNumber(String number) {
-        this.number = number;
+    public void setShelfNumber(String shelfNumber) {
+        this.shelfNumber = shelfNumber;
     }
 
     public Integer getHorizontal() {
@@ -87,9 +87,8 @@ public class BookShelf extends BasicEntity {
     public BookShelf() {
     }
 
-    public BookShelf(String number, Integer horizontal, Integer vertical, String room, String floor) {
-
-        this.number = number;
+    public BookShelf(String shelfNumber, Integer horizontal, Integer vertical, String room, String floor) {
+        this.shelfNumber = shelfNumber;
         this.horizontal = horizontal;
         this.vertical = vertical;
         this.room = room;

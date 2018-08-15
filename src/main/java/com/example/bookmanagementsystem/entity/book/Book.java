@@ -38,7 +38,7 @@ public class Book extends BasicEntity {
     private Date publishedDate;
 
     @Column
-    private Integer edition;
+    private Integer edition; //版次
 
     @Column
     private Double price;
@@ -50,7 +50,7 @@ public class Book extends BasicEntity {
     private Integer leftQuantity;
 
     @Column
-    private String number;
+    private String number; //编号
 
     @Column
     private Date borrowedDate;
