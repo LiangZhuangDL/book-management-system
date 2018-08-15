@@ -22,7 +22,7 @@ public class BorrowedBook extends BasicEntity {
     private Long id;
 
     @Column
-    private Integer maxBorowedQuantity = 6;
+    private Integer maxBorrowedQuantity = 6;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "borrowed_user", joinColumns = @JoinColumn(name = "basic_book_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "basic_user_id", referencedColumnName = "id"))
@@ -35,12 +35,12 @@ public class BorrowedBook extends BasicEntity {
     @Column
     private Boolean isFinished = false;
 
-    public Integer getMaxBorowedQuantity() {
-        return maxBorowedQuantity;
+    public Integer getMaxBorrowedQuantity() {
+        return maxBorrowedQuantity;
     }
 
-    public void setMaxBorowedQuantity(Integer maxBorowedQuantity) {
-        this.maxBorowedQuantity = maxBorowedQuantity;
+    public void setMaxBorowedQuantity(Integer maxBorrowedQuantity) {
+        this.maxBorrowedQuantity = maxBorrowedQuantity;
     }
 
     public BasicUser getBasicUser() {
@@ -70,8 +70,8 @@ public class BorrowedBook extends BasicEntity {
     public BorrowedBook() {
     }
 
-    public BorrowedBook(Integer maxBorowedQuantity, BasicUser basicUser, List<Book> books) {
-        this.maxBorowedQuantity = maxBorowedQuantity;
+    public BorrowedBook(Integer maxBorrowedQuantity, BasicUser basicUser, List<Book> books) {
+        this.maxBorrowedQuantity = maxBorrowedQuantity;
         this.basicUser = basicUser;
         this.books = books;
     }
