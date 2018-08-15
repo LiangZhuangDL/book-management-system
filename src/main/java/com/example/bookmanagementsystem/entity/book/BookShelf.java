@@ -22,10 +22,10 @@ public class BookShelf extends BasicEntity {
     private String number;
 
     @Column
-    private Integer row;
+    private Integer horizontal;
 
     @Column
-    private Integer column;
+    private Integer vertical;
 
     @Column
     private String room;
@@ -36,14 +36,6 @@ public class BookShelf extends BasicEntity {
     @Column
     private Boolean isDelete = false;
 
-    public Boolean getDelete() {
-        return isDelete;
-    }
-
-    public void setDelete(Boolean delete) {
-        isDelete = delete;
-    }
-
     public String getNumber() {
         return number;
     }
@@ -52,20 +44,20 @@ public class BookShelf extends BasicEntity {
         this.number = number;
     }
 
-    public Integer getRow() {
-        return row;
+    public Integer getHorizontal() {
+        return horizontal;
     }
 
-    public void setRow(Integer row) {
-        this.row = row;
+    public void setHorizontal(Integer horizontal) {
+        this.horizontal = horizontal;
     }
 
-    public Integer getColumn() {
-        return column;
+    public Integer getVertical() {
+        return vertical;
     }
 
-    public void setColumn(Integer column) {
-        this.column = column;
+    public void setVertical(Integer vertical) {
+        this.vertical = vertical;
     }
 
     public String getRoom() {
@@ -84,14 +76,23 @@ public class BookShelf extends BasicEntity {
         this.floor = floor;
     }
 
-    public BookShelf(String number, Integer row, Integer column, String room, String floor) {
-        this.number = number;
-        this.row = row;
-        this.column = column;
-        this.room = room;
-        this.floor = floor;
+    public Boolean getDelete() {
+        return isDelete;
+    }
+
+    public void setDelete(Boolean delete) {
+        isDelete = delete;
     }
 
     public BookShelf() {
+    }
+
+    public BookShelf(String number, Integer horizontal, Integer vertical, String room, String floor) {
+
+        this.number = number;
+        this.horizontal = horizontal;
+        this.vertical = vertical;
+        this.room = room;
+        this.floor = floor;
     }
 }

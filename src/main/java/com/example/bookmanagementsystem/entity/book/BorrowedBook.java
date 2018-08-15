@@ -24,11 +24,11 @@ public class BorrowedBook extends BasicEntity {
     @Column
     private Integer maxBorrowedQuantity = 6;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "borrowed_user", joinColumns = @JoinColumn(name = "basic_book_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "basic_user_id", referencedColumnName = "id"))
     private BasicUser basicUser;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name = "borrowed_book_book", joinColumns = @JoinColumn(name = "borrowed_book_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"))
     private List<Book> books;
 
