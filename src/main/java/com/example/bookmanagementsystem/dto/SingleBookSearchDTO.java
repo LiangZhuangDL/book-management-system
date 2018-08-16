@@ -1,24 +1,12 @@
-package com.example.bookmanagementsystem.entity.book;
-
-import org.springframework.data.elasticsearch.annotations.Document;
-
-import javax.persistence.Id;
-import java.io.Serializable;
+package com.example.bookmanagementsystem.dto;
 
 /**
  * @program: book-management-system
- * @description: 图书搜索实体类
+ * @description: 单个图书查询DTO
  * @author: Simon Zhuang
- * @create: 2018-08-15 11:45
+ * @create: 2018-08-13 11:51
  **/
-
-@Document(indexName = "book", type = "book")
-public class BookSearch implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    private String id;
+public class SingleBookSearchDTO {
 
     private String title;
 
@@ -27,24 +15,6 @@ public class BookSearch implements Serializable {
     private String publishingHouse;
 
     private String isbn;
-
-    private Boolean isDelete = false;
-
-    public Boolean getDelete() {
-        return isDelete;
-    }
-
-    public void setDelete(Boolean delete) {
-        isDelete = delete;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -78,14 +48,13 @@ public class BookSearch implements Serializable {
         this.isbn = isbn;
     }
 
-    public BookSearch(String id, String title, String author, String publishingHouse, String isbn) {
-        this.id = id;
+    public SingleBookSearchDTO(String title, String author, String publishingHouse, String isbn) {
         this.title = title;
         this.author = author;
         this.publishingHouse = publishingHouse;
         this.isbn = isbn;
     }
 
-    public BookSearch() {
+    public SingleBookSearchDTO() {
     }
 }

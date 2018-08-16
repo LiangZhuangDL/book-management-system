@@ -1,6 +1,7 @@
 package com.example.bookmanagementsystem.controller;
 
 import com.example.bookmanagementsystem.dto.BookSearchDTO;
+import com.example.bookmanagementsystem.dto.SingleBookSearchDTO;
 import com.example.bookmanagementsystem.service.BookService;
 import com.example.bookmanagementsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +53,16 @@ public class BookController {
     }
 
     @PostMapping(value = "/bookInformation")
-    public Response getBookInformation(){
-        return null;
+    public Response getBookInformation(SingleBookSearchDTO singleBookSearchDTO){
+
+        Map<String, Object> map = bookService.getBookByBookSearch(singleBookSearchDTO);
+        Boolean tag = (Boolean)map.get("success");
+        Response response = new Response();
+        if(tag){
+            return response.success(map);
+        }else {
+            return response.failure();
+        }
     }
 
 }

@@ -7,11 +7,11 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchCrudReposi
 
 public interface BookSearchRepository extends ElasticsearchCrudRepository<BookSearch, String> {
 
-    Page<BookSearch> findBookSearchByTitleContaining(String title, Pageable pageable);
+    Page<BookSearch> findBookSearchesByTitleContaining(String title, Pageable pageable);
 
-    Page<BookSearch> findBookSearchByAuthorContaining(String author, Pageable pageable);
+    Page<BookSearch> findBookSearchesByAuthorContaining(String author, Pageable pageable);
 
-    Page<BookSearch> findBookSearchByPublishingHouseContaining(String publishingHouse, Pageable pageable);
+    Page<BookSearch> findBookSearchesByPublishingHouseContaining(String publishingHouse, Pageable pageable);
 
-    Page<BookSearch> findBookSearchByIsbnContaining(String isbn, Pageable pageable);
+    Page<BookSearch> findBookSearchesByIsbnContaining(String isbn, Pageable pageable);
 }

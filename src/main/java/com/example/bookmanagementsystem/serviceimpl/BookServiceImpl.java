@@ -1,6 +1,7 @@
 package com.example.bookmanagementsystem.serviceimpl;
 
 import com.example.bookmanagementsystem.dto.BookDTO;
+import com.example.bookmanagementsystem.dto.SingleBookSearchDTO;
 import com.example.bookmanagementsystem.entity.book.Book;
 import com.example.bookmanagementsystem.entity.book.BookBasicType;
 import com.example.bookmanagementsystem.entity.book.BookSearch;
@@ -10,6 +11,7 @@ import com.example.bookmanagementsystem.repository.book.BookRepository;
 import com.example.bookmanagementsystem.repository.book.BookSearchRepository;
 import com.example.bookmanagementsystem.repository.book.BookShelfRepository;
 import com.example.bookmanagementsystem.service.BookService;
+import com.example.bookmanagementsystem.service.DefaultFileService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -42,6 +44,9 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private DefaultFileService defaultFileService;
+
     @Override
     public Map<String, Object> findBooksByTitleContaining(String title) {
         /** 
@@ -52,7 +57,7 @@ public class BookServiceImpl implements BookService {
         * @Date: 2018/8/16 
         **/ 
         Pageable pageable = PageRequest.of(1, 20);
-        Page<BookSearch> bookSearches = bookSearchRepository.findBookSearchByTitleContaining(title, pageable);
+        Page<BookSearch> bookSearches = bookSearchRepository.findBookSearchesByTitleContaining(title, pageable);
         Map<String, Object> map = new HashMap<>();
         map.put("data", bookSearches);
         return map;
@@ -68,7 +73,7 @@ public class BookServiceImpl implements BookService {
         * @Date: 2018/8/16 
         **/ 
         Pageable pageable = PageRequest.of(1, 20);
-        Page<BookSearch> bookSearches = bookSearchRepository.findBookSearchByAuthorContaining(author, pageable);
+        Page<BookSearch> bookSearches = bookSearchRepository.findBookSearchesByAuthorContaining(author, pageable);
         Map<String, Object> map = new HashMap<>();
         map.put("data", bookSearches);
         return map;
@@ -84,7 +89,7 @@ public class BookServiceImpl implements BookService {
         * @Date: 2018/8/16 
         **/ 
         Pageable pageable = PageRequest.of(1, 20);
-        Page<BookSearch> bookSearches = bookSearchRepository.findBookSearchByPublishingHouseContaining(publishingHouse, pageable);
+        Page<BookSearch> bookSearches = bookSearchRepository.findBookSearchesByPublishingHouseContaining(publishingHouse, pageable);
         Map<String, Object> map = new HashMap<>();
         map.put("data", bookSearches);
         return map;
@@ -100,7 +105,7 @@ public class BookServiceImpl implements BookService {
         * @Date: 2018/8/16 
         **/ 
         Pageable pageable = PageRequest.of(1, 20);
-        Page<BookSearch> bookSearches = bookSearchRepository.findBookSearchByIsbnContaining(isbn, pageable);
+        Page<BookSearch> bookSearches = bookSearchRepository.findBookSearchesByIsbnContaining(isbn, pageable);
         Map<String, Object> map = new HashMap<>();
         map.put("data", bookSearches);
         return map;
@@ -137,6 +142,27 @@ public class BookServiceImpl implements BookService {
                     map.put("success", false);
                     return map;
                 }
+            }else {
+                map.put("success", false);
+                return map;
+            }
+        }else {
+            map.put("success", false);
+            return map;
+        }
+    }
+
+    @Override
+    public Map<String, Object> getBookByBookSearch(SingleBookSearchDTO singleBookSearchDTO) {
+        Book book = bookRepository.findBookByTitleAndAuthorAndPublishingHouseAndIsbn(singleBookSearchDTO.getTitle(), singleBookSearchDTO.getAuthor(), singleBookSearchDTO.getPublishingHouse(), singleBookSearchDTO.getIsbn());
+        Map<String, Object> map = new HashMap<>();
+        if(!ObjectUtils.isEmpty(book)){
+            String coverImage = defaultFileService.findCoverBase64ById(book.getCover());
+            if(!ObjectUtils.isEmpty(coverImage)){
+                map.put("success", true);
+                map.put("data", book);
+                map.put("cover", coverImage);
+                return map;
             }else {
                 map.put("success", false);
                 return map;
