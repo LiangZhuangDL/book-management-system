@@ -127,7 +127,10 @@ public class BookServiceImpl implements BookService {
                 book.setBookBasicType(bookBasicType);
                 book.setBookShelf(returnBookShelf);
                 Book returnBook = bookRepository.save(book);
-                if(!ObjectUtils.isEmpty(returnBook)){
+                BookSearch bookSearch = new BookSearch();
+                BeanUtils.copyProperties(returnBook, bookSearch, "id");
+                BookSearch returnBookSearch = bookSearchRepository.save(bookSearch);
+                if(!ObjectUtils.isEmpty(returnBook) && !ObjectUtils.isEmpty(returnBookSearch)){
                     map.put("success", true);
                     return map;
                 }else{

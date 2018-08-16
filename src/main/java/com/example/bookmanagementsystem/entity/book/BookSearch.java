@@ -76,6 +76,6 @@ public class BookSearch implements Serializable {
         this.isbn = isbn;
     }
 
-    protected BookSearch() {
+    public BookSearch() {
     }
 }
