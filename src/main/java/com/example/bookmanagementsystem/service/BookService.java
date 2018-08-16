@@ -1,5 +1,7 @@
 package com.example.bookmanagementsystem.service;
 
+import com.example.bookmanagementsystem.dto.BookDTO;
+
 import java.util.Map;
 
 public interface BookService {
@@ -8,7 +10,9 @@ public interface BookService {
 
     Map<String, Object> findBooksByAuthorContaining(String author);
 
-    Map<String, Object> findBooksByPublishinghouseContaining(String publishingHouse);
+    Map<String, Object> findBooksByPublishingHouseContaining(String publishingHouse);
 
     Map<String, Object> findBooksByIsbnContaining(String isbn);
+
+    Map<String, Object> saveBook(BookDTO bookDTO);
 }

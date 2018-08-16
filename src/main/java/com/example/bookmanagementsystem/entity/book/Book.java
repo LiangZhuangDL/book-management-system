@@ -49,10 +49,10 @@ public class Book extends BasicEntity {
     @Column
     private String number; //编号
 
-    @Column
+    @Column(nullable = true)
     private Date borrowedDate;
 
-    @Column
+    @Column(nullable = true)
     private Integer maxHoldingDays;
 
     @Column

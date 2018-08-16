@@ -7,6 +7,7 @@ import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import com.example.bookmanagementsystem.entity.book.Book;
 import com.example.bookmanagementsystem.service.AuthorityService;
 import com.example.bookmanagementsystem.service.BasicUserService;
+import com.example.bookmanagementsystem.service.BookService;
 import com.example.bookmanagementsystem.service.DefaultFileService;
 import com.example.bookmanagementsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,9 @@ public class AdminController {
 
     @Autowired
     private DefaultFileService defaultFileService;
+
+    @Autowired
+    private BookService bookService;
 
     @GetMapping(value = "/showAllAuthorities/{page}/{size}")
     public Page<Authority> showAllAuthorities(@PathVariable("page")Integer page, @PathVariable("size")Integer size){
@@ -189,8 +193,14 @@ public class AdminController {
         * @Author: Simon Zhuang
         * @Date: 2018/8/16
         **/
-        Book book = bookDTO.convert(bookDTO);
-        return null;
+        Response response = new Response();
+        Map<String, Object> map = bookService.saveBook(bookDTO);
+        Boolean tag = (Boolean) map.get("success");
+        if(tag){
+            return response.success(map);
+        }else {
+            return response.failure();
+        }
     }
 
     @PostMapping(value = "/uploadCover")

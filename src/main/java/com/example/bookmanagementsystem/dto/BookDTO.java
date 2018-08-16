@@ -40,8 +40,6 @@ public class BookDTO implements DTOConvert<Book, BookDTO> {
 
     private String sign;
 
-    private String text;
-
     public String getCover() {
         return cover;
     }
@@ -170,18 +168,10 @@ public class BookDTO implements DTOConvert<Book, BookDTO> {
         this.sign = sign;
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
     public BookDTO() {
     }
 
-    public BookDTO(String cover, String title, String author, String isbn, String publishingHouse, Date publishedDate, Integer edition, Double price, Integer quantity, String number, String shelfNumber, Integer horizontal, Integer vertical, String room, String floor, String sign, String text) {
+    public BookDTO(String cover, String title, String author, String isbn, String publishingHouse, Date publishedDate, Integer edition, Double price, Integer quantity, String number, String shelfNumber, Integer horizontal, Integer vertical, String room, String floor, String sign) {
         this.cover = cover;
         this.title = title;
         this.author = author;
@@ -198,7 +188,6 @@ public class BookDTO implements DTOConvert<Book, BookDTO> {
         this.room = room;
         this.floor = floor;
         this.sign = sign;
-        this.text = text;
     }
 
     @Override

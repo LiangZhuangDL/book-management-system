@@ -26,6 +26,13 @@ public class BookController {
 
     @GetMapping(value = "/search")
     public Response search(BookSearchDTO bookSearchDTO){
+        /** 
+        * @Description: 根据查询索引查询图书基本信息 
+        * @Param: [bookSearchDTO] 
+        * @return: com.example.bookmanagementsystem.utils.Response 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/16 
+        **/ 
         Integer type = bookSearchDTO.getType();
         Response response = new Response();
         Map<String, Object> map;
@@ -34,7 +41,7 @@ public class BookController {
         }else if(type.equals(1)){
             map = bookService.findBooksByAuthorContaining(bookSearchDTO.getText());
         }else if(type.equals(2)){
-            map = bookService.findBooksByPublishinghouseContaining(bookSearchDTO.getText());
+            map = bookService.findBooksByPublishingHouseContaining(bookSearchDTO.getText());
         }else if(type.equals(3)){
             map = bookService.findBooksByIsbnContaining(bookSearchDTO.getText());
         } else {
