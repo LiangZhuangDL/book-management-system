@@ -7,10 +7,13 @@ import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import com.example.bookmanagementsystem.entity.book.Book;
 import com.example.bookmanagementsystem.service.AuthorityService;
 import com.example.bookmanagementsystem.service.BasicUserService;
+import com.example.bookmanagementsystem.service.DefaultFileService;
 import com.example.bookmanagementsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +32,9 @@ public class AdminController {
 
     @Autowired
     private AuthorityService authorityService;
+
+    @Autowired
+    private DefaultFileService defaultFileService;
 
     @GetMapping(value = "/showAllAuthorities/{page}/{size}")
     public Page<Authority> showAllAuthorities(@PathVariable("page")Integer page, @PathVariable("size")Integer size){
@@ -176,8 +182,34 @@ public class AdminController {
 
     @PostMapping(value = "/saveBook")
     public Response saveBook(BookDTO bookDTO){
+        /**
+        * @Description: 管理员上传并保存图书
+        * @Param: [bookDTO]
+        * @return: com.example.bookmanagementsystem.utils.Response
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/16
+        **/
         Book book = bookDTO.convert(bookDTO);
         return null;
+    }
+
+    @PostMapping(value = "/uploadCover")
+    public Response uploadCover(@RequestParam("file") MultipartFile file){
+        /**
+        * @Description: 管理员上传图书封面图片(AJAX)
+        * @Param: [file]
+        * @return: com.example.bookmanagementsystem.utils.Response
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/16
+        **/
+        Response response = new Response();
+        Map<String, Object> map = defaultFileService.uploadAvatar(file);
+        Boolean tag = (Boolean) map.get("success");
+        if(tag){
+            return response.success(map);
+        }else {
+            return response.failure();
+        }
     }
 
 }

@@ -3,6 +3,7 @@ package com.example.bookmanagementsystem.serviceimpl;
 import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import com.example.bookmanagementsystem.entity.file.DefaultFile;
 import com.example.bookmanagementsystem.entity.user.UserDetails;
+import com.example.bookmanagementsystem.enums.BookCoverEnum;
 import com.example.bookmanagementsystem.enums.DefaultAvatarEnum;
 import com.example.bookmanagementsystem.repository.anthentication.BasicUserRepository;
 import com.example.bookmanagementsystem.repository.file.DefaultFileRepository;
@@ -84,6 +85,39 @@ public class DefaultFileServiceImpl implements DefaultFileService {
     }
 
     @Override
+    public Map<String, Object> uploadCover(MultipartFile file) {
+        /**
+        * @Description: 上传图书封面，返回封面ID和图片的Base64码
+        * @Param: [file]
+        * @return: java.util.Map<java.lang.String,java.lang.Object>
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/16
+        **/
+        Map<String, Object> map = new HashMap<>();
+        try{
+            DefaultFile f = new DefaultFile(file.getOriginalFilename(), file.getContentType(), file.getSize(), new Binary(file.getBytes()));
+            DefaultFile returnFile = save(f);
+            if(!ObjectUtils.isEmpty(returnFile)){
+                String cover = returnFile.getId();
+                Base64.Encoder encoder = Base64.getEncoder();
+                String text = encoder.encodeToString(returnFile.getContent().getData()).replaceAll("\n","");
+                String image = "data:image/jpeg;base64," + text;
+                map.put("cover", cover);
+                map.put("image", image);
+                map.put("success", true);
+                return map;
+            }else{
+                map.put("success", false);
+                return map;
+            }
+        }catch (IOException e){
+            e.printStackTrace();
+            map.put("success", false);
+            return map;
+        }
+    }
+
+    @Override
     public String findAvatarBase64ById(String id) {
         /**
         * @Description: 通过文件ID返回头像图片的Base64码，根据用户性别返回头像
@@ -115,6 +149,25 @@ public class DefaultFileServiceImpl implements DefaultFileService {
             Base64.Encoder encoder = Base64.getEncoder();
             String text = encoder.encodeToString(returnFile.getContent().getData()).replaceAll("\n","");
             return "data:image/jpeg;base64," + text;
+        }
+    }
+
+    @Override
+    public String findCoverBase64ById(String id) {
+        /**
+        * @Description:  根据图书封面ID返回封面图片的Base64码
+        * @Param: [id]
+        * @return: java.lang.String
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/16
+        **/
+        DefaultFile returnFile = defaultFileRepository.findDefaultFileById(id);
+        if(!ObjectUtils.isEmpty(returnFile)){
+            Base64.Encoder encoder = Base64.getEncoder();
+            String text = encoder.encodeToString(returnFile.getContent().getData()).replaceAll("\n","");
+            return "data:image/jpeg;base64," + text;
+        }else{
+            return BookCoverEnum.DEFAULTCOVER.getCover();
         }
     }
 }

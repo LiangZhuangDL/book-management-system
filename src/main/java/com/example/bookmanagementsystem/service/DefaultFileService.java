@@ -17,5 +17,9 @@ public interface DefaultFileService {
 
     Map<String, Object> uploadAvatar(MultipartFile file);
 
+    Map<String, Object> uploadCover(MultipartFile file);
+
     String findAvatarBase64ById(String id);
+
+    String findCoverBase64ById(String id);
 }

@@ -47,9 +47,6 @@ public class Book extends BasicEntity {
     private Integer quantity;
 
     @Column
-    private Integer leftQuantity;
-
-    @Column
     private String number; //编号
 
     @Column
@@ -144,14 +141,6 @@ public class Book extends BasicEntity {
         this.quantity = quantity;
     }
 
-    public Integer getLeftQuantity() {
-        return leftQuantity;
-    }
-
-    public void setLeftQuantity(Integer leftQuantity) {
-        this.leftQuantity = leftQuantity;
-    }
-
     public String getNumber() {
         return number;
     }
@@ -211,7 +200,7 @@ public class Book extends BasicEntity {
     public Book() {
     }
 
-    public Book(String cover, String title, String author, String isbn, String publishingHouse, Date publishedDate, Integer edition, Double price, Integer quantity, Integer leftQuantity, String number, Date borrowedDate, Integer maxHoldingDays, BookBasicType bookBasicType, BookShelf bookShelf) {
+    public Book(String cover, String title, String author, String isbn, String publishingHouse, Date publishedDate, Integer edition, Double price, Integer quantity, String number, Date borrowedDate, Integer maxHoldingDays, BookBasicType bookBasicType, BookShelf bookShelf) {
         this.cover = cover;
         this.title = title;
         this.author = author;
@@ -221,7 +210,6 @@ public class Book extends BasicEntity {
         this.edition = edition;
         this.price = price;
         this.quantity = quantity;
-        this.leftQuantity = leftQuantity;
         this.number = number;
         this.borrowedDate = borrowedDate;
         this.maxHoldingDays = maxHoldingDays;

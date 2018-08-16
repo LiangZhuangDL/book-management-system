@@ -26,8 +26,6 @@ public class BookDTO implements DTOConvert<Book, BookDTO> {
 
     private Integer quantity;
 
-    private Integer leftQuantity;
-
     private String number;
 
     private String shelfNumber;
@@ -116,14 +114,6 @@ public class BookDTO implements DTOConvert<Book, BookDTO> {
         this.quantity = quantity;
     }
 
-    public Integer getLeftQuantity() {
-        return leftQuantity;
-    }
-
-    public void setLeftQuantity(Integer leftQuantity) {
-        this.leftQuantity = leftQuantity;
-    }
-
     public String getNumber() {
         return number;
     }
@@ -191,7 +181,7 @@ public class BookDTO implements DTOConvert<Book, BookDTO> {
     public BookDTO() {
     }
 
-    public BookDTO(String cover, String title, String author, String isbn, String publishingHouse, Date publishedDate, Integer edition, Double price, Integer quantity, Integer leftQuantity, String number, String shelfNumber, Integer horizontal, Integer vertical, String room, String floor, String sign, String text) {
+    public BookDTO(String cover, String title, String author, String isbn, String publishingHouse, Date publishedDate, Integer edition, Double price, Integer quantity, String number, String shelfNumber, Integer horizontal, Integer vertical, String room, String floor, String sign, String text) {
         this.cover = cover;
         this.title = title;
         this.author = author;
@@ -201,7 +191,6 @@ public class BookDTO implements DTOConvert<Book, BookDTO> {
         this.edition = edition;
         this.price = price;
         this.quantity = quantity;
-        this.leftQuantity = leftQuantity;
         this.number = number;
         this.shelfNumber = shelfNumber;
         this.horizontal = horizontal;
