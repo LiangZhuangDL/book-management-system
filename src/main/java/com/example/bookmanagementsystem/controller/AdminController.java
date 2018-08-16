@@ -213,7 +213,7 @@ public class AdminController {
         * @Date: 2018/8/16
         **/
         Response response = new Response();
-        Map<String, Object> map = defaultFileService.uploadAvatar(file);
+        Map<String, Object> map = defaultFileService.uploadCover(file);
         Boolean tag = (Boolean) map.get("success");
         if(tag){
             return response.success(map);
