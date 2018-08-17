@@ -2,6 +2,7 @@ package com.example.bookmanagementsystem.service;
 
 import com.example.bookmanagementsystem.dto.BookDTO;
 import com.example.bookmanagementsystem.dto.SingleBookSearchDTO;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 /**
@@ -12,16 +13,22 @@ import java.util.Map;
  **/
 public interface BookService {
 
+    @Transactional
     Map<String, Object> findBooksByTitleContaining(String title);
 
+    @Transactional
     Map<String, Object> findBooksByAuthorContaining(String author);
 
+    @Transactional
     Map<String, Object> findBooksByPublishingHouseContaining(String publishingHouse);
 
+    @Transactional
     Map<String, Object> findBooksByIsbnContaining(String isbn);
 
+    @Transactional
     Map<String, Object> saveBook(BookDTO bookDTO);
 
+    @Transactional
     Map<String, Object> getBookByBookSearch(SingleBookSearchDTO singleBookSearchDTO);
 
 }

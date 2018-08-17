@@ -3,6 +3,7 @@ package com.example.bookmanagementsystem.service;
 import com.example.bookmanagementsystem.dto.AddressDTO;
 import com.example.bookmanagementsystem.dto.UserDetailsDTO;
 import com.example.bookmanagementsystem.entity.user.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.text.ParseException;
 
@@ -14,7 +15,9 @@ import java.text.ParseException;
  **/
 public interface UserDetailsService {
 
+    @Transactional
     UserDetails getCurrentUserDetails();
 
+    @Transactional
     UserDetails save(UserDetailsDTO userDetailsDTO, AddressDTO addressDTO) throws ParseException;
 }

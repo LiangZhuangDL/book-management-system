@@ -2,6 +2,7 @@ package com.example.bookmanagementsystem.service;
 
 import com.example.bookmanagementsystem.entity.authentication.BasicUser;
 import org.springframework.data.domain.Page;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @program: book-management-system
@@ -11,11 +12,15 @@ import org.springframework.data.domain.Page;
  **/
 public interface BasicUserService {
 
+    @Transactional
     Boolean removeUserById(Long id);
 
+    @Transactional
     Boolean activeUser(String username);
 
+    @Transactional
     Page<BasicUser> getAllUsers(Integer page, Integer size);
 
+    @Transactional
     BasicUser findBasicUserByUsername(String username);
 }
