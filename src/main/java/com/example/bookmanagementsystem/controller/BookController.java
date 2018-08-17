@@ -1,13 +1,12 @@
 package com.example.bookmanagementsystem.controller;
 
-import com.example.bookmanagementsystem.dto.BookListSearchDTO;
-import com.example.bookmanagementsystem.dto.BookSearchDTO;
-import com.example.bookmanagementsystem.dto.SingleBookSearchDTO;
+import com.example.bookmanagementsystem.dto.*;
 import com.example.bookmanagementsystem.service.BookService;
 import com.example.bookmanagementsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -86,6 +85,16 @@ public class BookController {
         }else {
             return response.failure();
         }
+    }
+
+    @PostMapping(value = "/borrow")
+    public Response borrowBook(@RequestBody BorrowedBookListDTO borrowedBooksDTOS){
+        List<BorrowedBookDTO> borrowedBookDTOS = borrowedBooksDTOS.getBorrowedBookDTOS();
+        for(BorrowedBookDTO borrowedBookDTO: borrowedBookDTOS){
+            System.out.println(borrowedBookDTO);
+            System.out.println("*****");
+        }
+        return null;
     }
 
 }
