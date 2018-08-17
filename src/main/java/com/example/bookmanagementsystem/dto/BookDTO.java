@@ -5,7 +5,12 @@ import com.example.bookmanagementsystem.utils.DTOConvert;
 import org.springframework.beans.BeanUtils;
 
 import java.util.Date;
-
+/**
+ * @program: book-management-system
+ * @description: 图书DTO类
+ * @author: Simon Zhuang
+ * @create: 2018-08-13 11:51
+ **/
 public class BookDTO implements DTOConvert<Book, BookDTO> {
 
     private String cover;

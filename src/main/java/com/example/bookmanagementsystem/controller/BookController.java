@@ -54,7 +54,13 @@ public class BookController {
 
     @PostMapping(value = "/bookInformation")
     public Response getBookInformation(SingleBookSearchDTO singleBookSearchDTO){
-
+        /**
+        * @Description: 根据BookSearch对象返回的信息返回Book对象（搜索单条图书详细信息）
+        * @Param: [singleBookSearchDTO]
+        * @return: com.example.bookmanagementsystem.utils.Response
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/17
+        **/
         Map<String, Object> map = bookService.getBookByBookSearch(singleBookSearchDTO);
         Boolean tag = (Boolean)map.get("success");
         Response response = new Response();

@@ -154,6 +154,13 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Map<String, Object> getBookByBookSearch(SingleBookSearchDTO singleBookSearchDTO) {
+        /** 
+        * @Description: 查询单条图书详细信息和图书封面图片并返回 
+        * @Param: [singleBookSearchDTO] 
+        * @return: java.util.Map<java.lang.String,java.lang.Object> 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/17 
+        **/ 
         Book book = bookRepository.findBookByTitleAndAuthorAndPublishingHouseAndIsbn(singleBookSearchDTO.getTitle(), singleBookSearchDTO.getAuthor(), singleBookSearchDTO.getPublishingHouse(), singleBookSearchDTO.getIsbn());
         Map<String, Object> map = new HashMap<>();
         if(!ObjectUtils.isEmpty(book)){
