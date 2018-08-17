@@ -183,41 +183,39 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Map<String, Object> getBookListSearch(Integer page, Integer size, BookListSearchDTO bookListSearchDTO) {
+        /** 
+        * @Description: 根据查询类型查询批量查询图书 
+        * @Param: [page, size, bookListSearchDTO] 
+        * @return: java.util.Map<java.lang.String,java.lang.Object> 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/17 
+        **/ 
         Pageable pageable = PageRequest.of(page, size);
         Map<String, Object> map = new HashMap<>();
         String type = bookListSearchDTO.getSearchType();
         String text = bookListSearchDTO.getText();
-        if(type.equals("title")){
-            Page<Book> booksByTitleContaining = bookRepository.findBooksByTitleContaining(text, pageable);
-            if(!ObjectUtils.isEmpty(booksByTitleContaining)){
-                map.put("success", true);
-                map.put("data", booksByTitleContaining);
-                return map;
-            }else {
+        switch (type) {
+            case "title":
+                Page<Book> booksByTitleContaining = bookRepository.findBooksByTitleContaining(text, pageable);
+                return getStringObjectMap(map, booksByTitleContaining);
+            case "author":
+                Page<Book> booksByAuthorContaining = bookRepository.findBooksByAuthorContaining(text, pageable);
+                return getStringObjectMap(map, booksByAuthorContaining);
+            case "publishingHouse":
+                Page<Book> booksByPublishingHouseContaining = bookRepository.findBooksByPublishingHouseContaining(text, pageable);
+                return getStringObjectMap(map, booksByPublishingHouseContaining);
+            default:
                 map.put("success", false);
                 return map;
-            }
-        }else if(type.equals("author")){
-            Page<Book> booksByAuthorContaining = bookRepository.findBooksByAuthorContaining(text, pageable);
-            if(!ObjectUtils.isEmpty(booksByAuthorContaining)){
-                map.put("success", true);
-                map.put("data", booksByAuthorContaining);
-                return map;
-            }else {
-                map.put("success", false);
-                return map;
-            }
-        }else if(type.equals("publishingHouse")){
-            Page<Book> booksByPublishingHouseContaining = bookRepository.findBooksByPublishingHouseContaining(text, pageable);
-            if(!ObjectUtils.isEmpty(booksByPublishingHouseContaining)){
-                map.put("success", true);
-                map.put("data", booksByPublishingHouseContaining);
-                return map;
-            }else {
-                map.put("success", false);
-                return map;
-            }
-        }else {
+        }
+    }
+
+    private Map<String, Object> getStringObjectMap(Map<String, Object> map, Object object) {
+        if (!ObjectUtils.isEmpty(object)) {
+            map.put("success", true);
+            map.put("data", object);
+            return map;
+        } else {
             map.put("success", false);
             return map;
         }
