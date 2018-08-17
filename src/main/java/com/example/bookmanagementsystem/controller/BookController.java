@@ -1,14 +1,12 @@
 package com.example.bookmanagementsystem.controller;
 
+import com.example.bookmanagementsystem.dto.BookListSearchDTO;
 import com.example.bookmanagementsystem.dto.BookSearchDTO;
 import com.example.bookmanagementsystem.dto.SingleBookSearchDTO;
 import com.example.bookmanagementsystem.service.BookService;
 import com.example.bookmanagementsystem.utils.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -62,6 +60,25 @@ public class BookController {
         * @Date: 2018/8/17
         **/
         Map<String, Object> map = bookService.getBookByBookSearch(singleBookSearchDTO);
+        Boolean tag = (Boolean)map.get("success");
+        Response response = new Response();
+        if(tag){
+            return response.success(map);
+        }else {
+            return response.failure();
+        }
+    }
+
+    @GetMapping(value = "/bookList/{page}/{size}")
+    public Response bookList(@PathVariable("page")Integer page, @PathVariable("size")Integer size, BookListSearchDTO bookListSearchDTO){
+        /** 
+        * @Description: 分页查询，按照类型查询图书批量信息
+        * @Param: [page, size, bookListSearchDTO] 
+        * @return: com.example.bookmanagementsystem.utils.Response 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/17 
+        **/ 
+        Map<String, Object> map = bookService.getBookListSearch(page, size, bookListSearchDTO);
         Boolean tag = (Boolean)map.get("success");
         Response response = new Response();
         if(tag){

@@ -1,6 +1,7 @@
 package com.example.bookmanagementsystem.serviceimpl;
 
 import com.example.bookmanagementsystem.dto.BookDTO;
+import com.example.bookmanagementsystem.dto.BookListSearchDTO;
 import com.example.bookmanagementsystem.dto.SingleBookSearchDTO;
 import com.example.bookmanagementsystem.entity.book.Book;
 import com.example.bookmanagementsystem.entity.book.BookBasicType;
@@ -169,6 +170,48 @@ public class BookServiceImpl implements BookService {
                 map.put("success", true);
                 map.put("data", book);
                 map.put("cover", coverImage);
+                return map;
+            }else {
+                map.put("success", false);
+                return map;
+            }
+        }else {
+            map.put("success", false);
+            return map;
+        }
+    }
+
+    @Override
+    public Map<String, Object> getBookListSearch(Integer page, Integer size, BookListSearchDTO bookListSearchDTO) {
+        Pageable pageable = PageRequest.of(page, size);
+        Map<String, Object> map = new HashMap<>();
+        String type = bookListSearchDTO.getSearchType();
+        String text = bookListSearchDTO.getText();
+        if(type.equals("title")){
+            Page<Book> booksByTitleContaining = bookRepository.findBooksByTitleContaining(text, pageable);
+            if(!ObjectUtils.isEmpty(booksByTitleContaining)){
+                map.put("success", true);
+                map.put("data", booksByTitleContaining);
+                return map;
+            }else {
+                map.put("success", false);
+                return map;
+            }
+        }else if(type.equals("author")){
+            Page<Book> booksByAuthorContaining = bookRepository.findBooksByAuthorContaining(text, pageable);
+            if(!ObjectUtils.isEmpty(booksByAuthorContaining)){
+                map.put("success", true);
+                map.put("data", booksByAuthorContaining);
+                return map;
+            }else {
+                map.put("success", false);
+                return map;
+            }
+        }else if(type.equals("publishingHouse")){
+            Page<Book> booksByPublishingHouseContaining = bookRepository.findBooksByPublishingHouseContaining(text, pageable);
+            if(!ObjectUtils.isEmpty(booksByPublishingHouseContaining)){
+                map.put("success", true);
+                map.put("data", booksByPublishingHouseContaining);
                 return map;
             }else {
                 map.put("success", false);
