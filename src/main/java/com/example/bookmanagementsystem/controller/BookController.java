@@ -88,13 +88,15 @@ public class BookController {
     }
 
     @PostMapping(value = "/borrow")
-    public Response borrowBook(@RequestBody BorrowedBookListDTO borrowedBooksDTOS){
-        List<BorrowedBookDTO> borrowedBookDTOS = borrowedBooksDTOS.getBorrowedBookDTOS();
-        for(BorrowedBookDTO borrowedBookDTO: borrowedBookDTOS){
-            System.out.println(borrowedBookDTO);
-            System.out.println("*****");
+    public Response borrowBooks(@RequestBody BorrowedBookListDTO borrowedBooksDTOS){
+        Map<String, Object> map = bookService.borrowBooks(borrowedBooksDTOS);
+        Boolean tag = (Boolean)map.get("success");
+        Response response = new Response();
+        if(tag){
+            return response.success(map);
+        }else {
+            return response.failure();
         }
-        return null;
     }
 
 }

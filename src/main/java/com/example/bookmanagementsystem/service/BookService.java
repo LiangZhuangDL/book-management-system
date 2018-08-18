@@ -2,6 +2,7 @@ package com.example.bookmanagementsystem.service;
 
 import com.example.bookmanagementsystem.dto.BookDTO;
 import com.example.bookmanagementsystem.dto.BookListSearchDTO;
+import com.example.bookmanagementsystem.dto.BorrowedBookListDTO;
 import com.example.bookmanagementsystem.dto.SingleBookSearchDTO;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,5 +35,8 @@ public interface BookService {
 
     @Transactional
     Map<String, Object> getBookListSearch(Integer page, Integer size, BookListSearchDTO bookListSearchDTO);
+
+    @Transactional
+    Map<String, Object> borrowBooks(BorrowedBookListDTO borrowedBookListDTO);
 
 }

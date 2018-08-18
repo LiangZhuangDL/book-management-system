@@ -75,4 +75,9 @@ public class BorrowedBook extends BasicEntity {
         this.basicUser = basicUser;
         this.books = books;
     }
+
+    public BorrowedBook(BasicUser basicUser, List<Book> books) {
+        this.basicUser = basicUser;
+        this.books = books;
+    }
 }

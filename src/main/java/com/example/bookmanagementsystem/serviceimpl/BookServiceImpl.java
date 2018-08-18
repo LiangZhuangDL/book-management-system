@@ -1,16 +1,10 @@
 package com.example.bookmanagementsystem.serviceimpl;
 
-import com.example.bookmanagementsystem.dto.BookDTO;
-import com.example.bookmanagementsystem.dto.BookListSearchDTO;
-import com.example.bookmanagementsystem.dto.SingleBookSearchDTO;
-import com.example.bookmanagementsystem.entity.book.Book;
-import com.example.bookmanagementsystem.entity.book.BookBasicType;
-import com.example.bookmanagementsystem.entity.book.BookSearch;
-import com.example.bookmanagementsystem.entity.book.BookShelf;
-import com.example.bookmanagementsystem.repository.book.BookBasicTypeRepository;
-import com.example.bookmanagementsystem.repository.book.BookRepository;
-import com.example.bookmanagementsystem.repository.book.BookSearchRepository;
-import com.example.bookmanagementsystem.repository.book.BookShelfRepository;
+import com.example.bookmanagementsystem.dto.*;
+import com.example.bookmanagementsystem.entity.authentication.BasicUser;
+import com.example.bookmanagementsystem.entity.book.*;
+import com.example.bookmanagementsystem.repository.book.*;
+import com.example.bookmanagementsystem.service.BasicUserService;
 import com.example.bookmanagementsystem.service.BookService;
 import com.example.bookmanagementsystem.service.DefaultFileService;
 import org.springframework.beans.BeanUtils;
@@ -18,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @program: book-management-system
@@ -47,6 +41,15 @@ public class BookServiceImpl implements BookService {
 
     @Autowired
     private DefaultFileService defaultFileService;
+
+    @Autowired
+    private BasicUserService basicUserService;
+
+    @Autowired
+    private BookQuantityRepository bookQuantityRepository;
+
+    @Autowired
+    private BorrowedBookRepository borrowedBookRepository;
 
     @Override
     public Map<String, Object> findBooksByTitleContaining(String title) {
@@ -134,9 +137,11 @@ public class BookServiceImpl implements BookService {
                 book.setBookShelf(returnBookShelf);
                 Book returnBook = bookRepository.save(book);
                 BookSearch bookSearch = new BookSearch();
+                BookQuantity bookQuantity = new BookQuantity(book.getQuantity(), book);
                 BeanUtils.copyProperties(returnBook, bookSearch, "id");
                 BookSearch returnBookSearch = bookSearchRepository.save(bookSearch);
-                if(!ObjectUtils.isEmpty(returnBook) && !ObjectUtils.isEmpty(returnBookSearch)){
+                BookQuantity returnBookQuantity = bookQuantityRepository.save(bookQuantity);
+                if(!ObjectUtils.isEmpty(returnBook) && !ObjectUtils.isEmpty(returnBookSearch) && !ObjectUtils.isEmpty(returnBookQuantity)){
                     map.put("success", true);
                     return map;
                 }else{
@@ -208,6 +213,49 @@ public class BookServiceImpl implements BookService {
                 map.put("success", false);
                 return map;
         }
+    }
+
+    @Override
+    public Map<String, Object> borrowBooks(BorrowedBookListDTO borrowedBookListDTO) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<Book> books = new ArrayList<>();
+        List<String> successBorrowedBook = new ArrayList<>();
+        BasicUser basicUser = basicUserService.findBasicUserByUsername(username);
+        Map<String, Object> map = new HashMap<>();
+        if(!ObjectUtils.isEmpty(basicUser)){
+            List<BorrowedBookDTO> borrowedBookDTOS = borrowedBookListDTO.getBorrowedBookDTOS();
+            if(borrowedBookDTOS.size() <= 6){
+                for(BorrowedBookDTO borrowedBookDTO : borrowedBookDTOS){
+                    Book book = bookRepository.findBookByTitleAndAuthorAndIsbn(borrowedBookDTO.getTitle(), borrowedBookDTO.getAuthor(), borrowedBookDTO.getIsbn());
+                    BookQuantity bookQuantity = bookQuantityRepository.findBookQuantityByBook(book);
+                    if(!ObjectUtils.isEmpty(book) && bookQuantity.getLeftQuantities() >= 1){
+                        book.setBorrowedDate(new Date());
+                        book.setMaxHoldingDays(30);
+                        books.add(book);
+                        Integer leftQuantity = bookQuantity.getLeftQuantities() -1;
+                        bookQuantity.setLeftQuantities(leftQuantity);
+                        bookQuantityRepository.save(bookQuantity);
+                        successBorrowedBook.add(book.getTitle());
+                    }
+                }
+                BorrowedBook borrowedBook = new BorrowedBook(basicUser, books);
+                BorrowedBook result = borrowedBookRepository.save(borrowedBook);
+                if(!ObjectUtils.isEmpty(result)){
+                    map.put("success", true);
+                    map.put("borrowedBook", successBorrowedBook);
+                    return map;
+                }else {
+                    map.put("success", false);
+                    return map;
+                }
+            }else{
+                map.put("success", false);
+                return map;
+            }
+        }
+
+
+        return null;
     }
 
     private Map<String, Object> getStringObjectMap(Map<String, Object> map, Object object) {
