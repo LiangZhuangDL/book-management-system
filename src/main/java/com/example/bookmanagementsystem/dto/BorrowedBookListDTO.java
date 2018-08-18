@@ -27,10 +27,4 @@ public class BorrowedBookListDTO {
         this.borrowedBookDTOS = borrowedBookDTOS;
     }
 
-    @Override
-    public String toString() {
-        return "BorrowedBookListDTO{" +
-                "borrowedBookDTOS=" + borrowedBookDTOS +
-                '}';
-    }
 }

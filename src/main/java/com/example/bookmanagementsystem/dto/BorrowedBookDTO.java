@@ -14,6 +14,8 @@ public class BorrowedBookDTO {
 
     private String isbn;
 
+    private String number;
+
     public String getTitle() {
         return title;
     }
@@ -38,21 +40,22 @@ public class BorrowedBookDTO {
         this.isbn = isbn;
     }
 
-    public BorrowedBookDTO(String title, String author, String isbn) {
+    public String getNumber() {
+        return number;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public BorrowedBookDTO(String title, String author, String isbn, String number) {
         this.title = title;
         this.author = author;
         this.isbn = isbn;
+        this.number = number;
     }
 
     public BorrowedBookDTO() {
     }
 
-    @Override
-    public String toString() {
-        return "BorrowedBookDTO{" +
-                "title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", isbn='" + isbn + '\'' +
-                '}';
-    }
 }

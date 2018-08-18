@@ -39,4 +39,10 @@ public interface BookService {
     @Transactional
     Map<String, Object> borrowBooks(BorrowedBookListDTO borrowedBookListDTO);
 
+    @Transactional
+    Map<String, Object> returnBooks(BorrowedBookListDTO borrowedBookListDTO);
+
+    @Transactional
+    Map<String, Object> renewBooks(BorrowedBookListDTO borrowedBookListDTO);
+
 }

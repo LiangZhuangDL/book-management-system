@@ -95,4 +95,9 @@ public class UserController {
             return response.failure();
         }
     }
+
+    @GetMapping(value = "/showBorrowedBookInformation")
+    public Response showBorrowedBookInformation(){
+        return null;
+    }
 }

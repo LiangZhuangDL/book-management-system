@@ -99,4 +99,28 @@ public class BookController {
         }
     }
 
+    @PostMapping(value = "/return")
+    public Response returnBooks(@RequestBody BorrowedBookListDTO borrowedBooksDTOS){
+        Map<String, Object> map = bookService.returnBooks(borrowedBooksDTOS);
+        Boolean tag = (Boolean)map.get("success");
+        Response response = new Response();
+        if(tag){
+            return response.success(map);
+        }else {
+            return response.failure();
+        }
+    }
+
+    @PostMapping(value = "/renew")
+    public Response renewBooks(@RequestBody BorrowedBookListDTO borrowedBooksDTOS){
+        Map<String, Object> map = bookService.renewBooks(borrowedBooksDTOS);
+        Boolean tag = (Boolean)map.get("success");
+        Response response = new Response();
+        if(tag){
+            return response.success(map);
+        }else {
+            return response.failure();
+        }
+    }
+
 }

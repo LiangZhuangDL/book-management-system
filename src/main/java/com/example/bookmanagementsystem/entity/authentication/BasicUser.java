@@ -51,6 +51,9 @@ public class BasicUser extends BasicEntity implements UserDetails {
     @Column
     private String activeCode;
 
+    @Column
+    private Boolean isBorrowed = false;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -141,6 +144,30 @@ public class BasicUser extends BasicEntity implements UserDetails {
 
     public void setDelete(Boolean delete) {
         isDelete = delete;
+    }
+
+    public Boolean getBorrowed() {
+        return isBorrowed;
+    }
+
+    public void setBorrowed(Boolean borrowed) {
+        isBorrowed = borrowed;
+    }
+
+    public Boolean getAccountNonExpired() {
+        return accountNonExpired;
+    }
+
+    public Boolean getAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public Boolean getCredentialsNonExpired() {
+        return credentialsNonExpired;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
     }
 
     public BasicUser() {
