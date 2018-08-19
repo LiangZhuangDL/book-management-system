@@ -100,4 +100,9 @@ public class UserController {
     public Response showBorrowedBookInformation(){
         return null;
     }
+
+    @GetMapping(value = "/showBorrowedBookHistory")
+    public Response showBorrowedBookHistory(){
+        return null;
+    }
 }
