@@ -265,10 +265,10 @@ public class BookServiceImpl implements BookService {
                 map.put("success", false);
                 return map;
             }
+        }else{
+            map.put("success", false);
+            return map;
         }
-
-
-        return null;
     }
 
     @Override
@@ -281,7 +281,7 @@ public class BookServiceImpl implements BookService {
             List<BorrowedBookDTO> borrowedBookDTOS = borrowedBookListDTO.getBorrowedBookDTOS();
             if(!ObjectUtils.isEmpty(borrowedBook) && borrowedBookDTOS.size() <= borrowedBook.getMaxBorrowedQuantity()){
                 List<Book> books = borrowedBook.getBooks();
-                Double price = 0.0;
+                double price = 0.0;
                 for (Book book: books){
                     for(BorrowedBookDTO borrowedBookDTO : borrowedBookDTOS){
                         Book returnBook = bookRepository.findBookByTitleAndAuthorAndIsbnAndNumber(borrowedBookDTO.getTitle(), borrowedBookDTO.getAuthor(), borrowedBookDTO.getIsbn(), borrowedBookDTO.getNumber());
@@ -292,8 +292,8 @@ public class BookServiceImpl implements BookService {
                             Date now = new Date();
                             Long days = ((now.getTime() - date.getTime())/1000*60*60*24 + 1);
                             if(days > book.getMaxHoldingDays()){
-                                Integer overdueDays = (int)(book.getMaxHoldingDays() - days);
-                                price = price + overdueDays * book.getPrice();
+                                int overdueDays = (int)(book.getMaxHoldingDays() - days);
+                                price = price + overdueDays * book.getPrice() * 0.1;
                             }
                             book.setMaxHoldingDays(null);
                             book.setBorrowedDate(null);
