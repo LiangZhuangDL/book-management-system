@@ -248,7 +248,7 @@ public class BookServiceImpl implements BookService {
                     }
                 }
                 Integer maxBorrowNumber = borrowedBook.getMaxBorrowedQuantity() - borrowedBookDTOS.size();
-                BorrowedBook borrowedBooks = new BorrowedBook(basicUser, books);
+                BorrowedBook borrowedBooks = new BorrowedBook(basicUser, books, books);
                 borrowedBooks.setMaxBorrowedQuantity(maxBorrowNumber);
                 BorrowedBook result = borrowedBookRepository.save(borrowedBooks);
                 basicUser.setBorrowed(true);
@@ -276,6 +276,7 @@ public class BookServiceImpl implements BookService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         BasicUser basicUser = basicUserService.findBasicUserByUsername(username);
         Map<String, Object> map = new HashMap<>();
+        List<Book> successList = new ArrayList<>();
         if(!ObjectUtils.isEmpty(basicUser) && basicUser.getBorrowed()){
             BorrowedBook borrowedBook = borrowedBookRepository.findBorrowedBookByBasicUser(basicUser);
             List<BorrowedBookDTO> borrowedBookDTOS = borrowedBookListDTO.getBorrowedBookDTOS();
@@ -300,6 +301,7 @@ public class BookServiceImpl implements BookService {
                             Integer leftQuantity = bookQuantity.getLeftQuantities() + 1;
                             bookQuantity.setLeftQuantities(leftQuantity);
                             bookQuantityRepository.save(bookQuantity);
+                            successList.add(book);
                         }
                     }
                 }
@@ -320,6 +322,7 @@ public class BookServiceImpl implements BookService {
                 if(!ObjectUtils.isEmpty(result)){
                     map.put("success", true);
                     map.put("price", price);
+                    map.put("successList", successList);
                     return map;
                 }else{
                     map.put("success", false);
@@ -337,7 +340,54 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Map<String, Object> renewBooks(BorrowedBookListDTO borrowedBookListDTO) {
-        return null;
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        BasicUser basicUser = basicUserService.findBasicUserByUsername(username);
+        Map<String, Object> map = new HashMap<>();
+        List<Book> bookList = new ArrayList<>();
+        List<Book> successList = new ArrayList<>();
+        List<Book> failureList = new ArrayList<>();
+        if(!ObjectUtils.isEmpty(basicUser) && basicUser.getBorrowed()){
+            BorrowedBook borrowedBook = borrowedBookRepository.findBorrowedBookByBasicUser(basicUser);
+            List<BorrowedBookDTO> borrowedBookDTOS = borrowedBookListDTO.getBorrowedBookDTOS();
+            if(!ObjectUtils.isEmpty(borrowedBook) && borrowedBookDTOS.size() <= borrowedBook.getMaxBorrowedQuantity()){
+                List<Book> books = borrowedBook.getBooks();
+                for(Book book: books){
+                    for(BorrowedBookDTO borrowedBookDTO : borrowedBookDTOS){
+                        Book returnBook = bookRepository.findBookByTitleAndAuthorAndIsbnAndNumber(borrowedBookDTO.getTitle(), borrowedBookDTO.getAuthor(), borrowedBookDTO.getIsbn(), borrowedBookDTO.getNumber());
+                        if(returnBook.equals(book)){
+                            book.setRenew(true);
+                            book.setMaxHoldingDays(book.getMaxHoldingDays() + 30);
+                            Book result = bookRepository.save(book);
+                            if(!ObjectUtils.isEmpty(result)){
+                                bookList.add(result);
+                                successList.add(result);
+                            }
+                        }else {
+                            bookList.add(book);
+                            failureList.add(returnBook);
+                        }
+                    }
+                }
+                borrowedBook.setBooks(bookList);
+                BorrowedBook borrowedBookResult = borrowedBookRepository.save(borrowedBook);
+                if(!ObjectUtils.isEmpty(borrowedBookResult)){
+                    map.put("success", true);
+                    map.put("successList", successList);
+                    map.put("failureList", failureList);
+                    return map;
+                }else{
+                    map.put("success", false);
+                    return map;
+                }
+            }else {
+                map.put("success", false);
+                return map;
+            }
+        }
+        else {
+            map.put("success", false);
+            return map;
+        }
     }
 
     private Map<String, Object> getStringObjectMap(Map<String, Object> map, Object object) {

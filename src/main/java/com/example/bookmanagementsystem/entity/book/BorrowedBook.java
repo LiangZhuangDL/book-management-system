@@ -32,6 +32,10 @@ public class BorrowedBook extends BasicEntity {
     @JoinTable(name = "borrowed_book_book", joinColumns = @JoinColumn(name = "borrowed_book_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"))
     private List<Book> books;
 
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinTable(name = "borrowed_book_book_history", joinColumns = @JoinColumn(name = "borrowed_book_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"))
+    private List<Book> history;
+
     @Column
     private Boolean isFinished = false;
 
@@ -63,6 +67,14 @@ public class BorrowedBook extends BasicEntity {
         return isFinished;
     }
 
+    public List<Book> getHistory() {
+        return history;
+    }
+
+    public void setHistory(List<Book> history) {
+        this.history = history;
+    }
+
     public void setFinished(Boolean finished) {
         isFinished = finished;
     }
@@ -79,5 +91,11 @@ public class BorrowedBook extends BasicEntity {
     public BorrowedBook(BasicUser basicUser, List<Book> books) {
         this.basicUser = basicUser;
         this.books = books;
+    }
+
+    public BorrowedBook(BasicUser basicUser, List<Book> books, List<Book> history) {
+        this.basicUser = basicUser;
+        this.books = books;
+        this.history = history;
     }
 }
