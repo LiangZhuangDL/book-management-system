@@ -223,7 +223,8 @@ public class BookServiceImpl implements BookService {
     public Map<String, Object> borrowBooks(BorrowedBookListDTO borrowedBookListDTO) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         List<Book> books = new ArrayList<>();
-        List<String> successBorrowedBook = new ArrayList<>();
+        List<Book> successList = new ArrayList<>();
+        List<Book> failureList = new ArrayList<>();
         BasicUser basicUser = basicUserService.findBasicUserByUsername(username);
         Map<String, Object> map = new HashMap<>();
         if(!ObjectUtils.isEmpty(basicUser) && !basicUser.getBorrowed()){
@@ -244,7 +245,9 @@ public class BookServiceImpl implements BookService {
                         Integer leftQuantity = bookQuantity.getLeftQuantities() - 1;
                         bookQuantity.setLeftQuantities(leftQuantity);
                         bookQuantityRepository.save(bookQuantity);
-                        successBorrowedBook.add(book.getTitle());
+                        successList.add(book);
+                    }else {
+                        failureList.add(book);
                     }
                 }
                 Integer maxBorrowNumber = borrowedBook.getMaxBorrowedQuantity() - borrowedBookDTOS.size();
@@ -255,7 +258,8 @@ public class BookServiceImpl implements BookService {
                 BasicUser returnUser = basicUserRepository.save(basicUser);
                 if(!ObjectUtils.isEmpty(result) && !ObjectUtils.isEmpty(returnUser)){
                     map.put("success", true);
-                    map.put("borrowedBook", successBorrowedBook);
+                    map.put("successList", successList);
+                    map.put("failureList", failureList);
                     return map;
                 }else {
                     map.put("success", false);
@@ -277,6 +281,7 @@ public class BookServiceImpl implements BookService {
         BasicUser basicUser = basicUserService.findBasicUserByUsername(username);
         Map<String, Object> map = new HashMap<>();
         List<Book> successList = new ArrayList<>();
+        List<Book> failureList = new ArrayList<>();
         if(!ObjectUtils.isEmpty(basicUser) && basicUser.getBorrowed()){
             BorrowedBook borrowedBook = borrowedBookRepository.findBorrowedBookByBasicUser(basicUser);
             List<BorrowedBookDTO> borrowedBookDTOS = borrowedBookListDTO.getBorrowedBookDTOS();
@@ -302,6 +307,8 @@ public class BookServiceImpl implements BookService {
                             bookQuantity.setLeftQuantities(leftQuantity);
                             bookQuantityRepository.save(bookQuantity);
                             successList.add(book);
+                        }else {
+                            failureList.add(returnBook);
                         }
                     }
                 }
@@ -323,6 +330,7 @@ public class BookServiceImpl implements BookService {
                     map.put("success", true);
                     map.put("price", price);
                     map.put("successList", successList);
+                    map.put("failureList", failureList);
                     return map;
                 }else{
                     map.put("success", false);
@@ -351,10 +359,18 @@ public class BookServiceImpl implements BookService {
             List<BorrowedBookDTO> borrowedBookDTOS = borrowedBookListDTO.getBorrowedBookDTOS();
             if(!ObjectUtils.isEmpty(borrowedBook) && borrowedBookDTOS.size() <= borrowedBook.getMaxBorrowedQuantity()){
                 List<Book> books = borrowedBook.getBooks();
+                double price = 0.0;
                 for(Book book: books){
                     for(BorrowedBookDTO borrowedBookDTO : borrowedBookDTOS){
                         Book returnBook = bookRepository.findBookByTitleAndAuthorAndIsbnAndNumber(borrowedBookDTO.getTitle(), borrowedBookDTO.getAuthor(), borrowedBookDTO.getIsbn(), borrowedBookDTO.getNumber());
                         if(returnBook.equals(book)){
+                            Date now = new Date();
+                            Date date = book.getBorrowedDate();
+                            Long days = ((now.getTime() - date.getTime())/1000*60*60*24 + 1);
+                            if(days > book.getMaxHoldingDays()){
+                                int overdueDays = (int)(book.getMaxHoldingDays() - days);
+                                price = price + overdueDays * book.getPrice() * 0.1;
+                            }
                             book.setRenew(true);
                             book.setMaxHoldingDays(book.getMaxHoldingDays() + 30);
                             Book result = bookRepository.save(book);
