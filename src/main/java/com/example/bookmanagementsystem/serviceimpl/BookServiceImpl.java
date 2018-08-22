@@ -276,6 +276,17 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Map<String, Object> returnBooks(BorrowedBookListDTO borrowedBookListDTO) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        BasicUser basicUser = basicUserRepository.findBasicUserByUsername(username);
+        List<BorrowedBookHistory> failureBorrowedBookHistories = new ArrayList<>();
+        List<Book> failureBooks = new ArrayList<>();
+        Map<String, Object> map = new HashMap<>();
+        if(!ObjectUtils.isEmpty(basicUser)){
+            BorrowedBook borrowedBook = borrowedBookRepository.findBorrowedBookByBasicUser(basicUser);
+            if(!ObjectUtils.isEmpty(borrowedBook)){
+
+            }
+        }
         return null;
     }
 
