@@ -31,6 +31,9 @@ public class BorrowedBookHistory extends BasicEntity {
     @JoinTable(name = "history_book", joinColumns = @JoinColumn(name = "history_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"))
     private Book book;
 
+    @Column
+    private Boolean isFinished = false;
+
     public Date getFinishDate() {
         return finishDate;
     }
@@ -53,6 +56,14 @@ public class BorrowedBookHistory extends BasicEntity {
 
     public void setBook(Book book) {
         this.book = book;
+    }
+
+    public Boolean getFinished() {
+        return isFinished;
+    }
+
+    public void setFinished(Boolean finished) {
+        isFinished = finished;
     }
 
     public BorrowedBookHistory(Date finishDate, BasicUser basicUser, Book book) {

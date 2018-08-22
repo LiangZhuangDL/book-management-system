@@ -279,15 +279,64 @@ public class BookServiceImpl implements BookService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         BasicUser basicUser = basicUserRepository.findBasicUserByUsername(username);
         List<BorrowedBookHistory> failureBorrowedBookHistories = new ArrayList<>();
+        List<Book> returnBooks = new ArrayList<>();
         List<Book> failureBooks = new ArrayList<>();
         Map<String, Object> map = new HashMap<>();
+        double price = 0;
         if(!ObjectUtils.isEmpty(basicUser)){
             BorrowedBook borrowedBook = borrowedBookRepository.findBorrowedBookByBasicUser(basicUser);
             if(!ObjectUtils.isEmpty(borrowedBook)){
-
+                List<Book> books = borrowedBook.getBooks();
+                List<BorrowedBookDTO> borrowedBookDTOS = borrowedBookListDTO.getBorrowedBookDTOS();
+                for(BorrowedBookDTO borrowedBookDTO : borrowedBookDTOS){
+                    Book returnBook = bookRepository.findBookByTitleAndAuthorAndIsbnAndNumber(borrowedBookDTO.getTitle(), borrowedBookDTO.getAuthor(), borrowedBookDTO.getIsbn(), borrowedBookDTO.getNumber());
+                    if(books.contains(returnBook)){
+                        returnBooks.add(returnBook);
+                    }else {
+                        failureBooks.add(returnBook);
+                    }
+                }
+                if(books.removeAll(returnBooks)){
+                    for(Book historyBook : returnBooks){
+                        BorrowedBookHistory borrowedBookHistory = borrowedBookHistoryRepository.findBorrowedBookHistoryByBookAndBasicUserAndFinished(historyBook, basicUser, false);
+                        Date borrowedDate = borrowedBookHistory.getCreateTime();
+                        Date now = new Date();
+                        Calendar borrowedCalender = new GregorianCalendar();
+                        Calendar nowCalender = new GregorianCalendar();
+                        borrowedCalender.setTime(borrowedDate);
+                        nowCalender.setTime(now);
+                        int days = nowCalender.get(Calendar.DAY_OF_YEAR) - borrowedCalender.get(Calendar.DAY_OF_YEAR);
+                        price = price + days * historyBook.getPrice() * 0.1;
+                        borrowedBookHistory.setFinishDate(new Date());
+                        borrowedBookHistory.setFinished(true);
+                        if(ObjectUtils.isEmpty(borrowedBookHistoryRepository.save(borrowedBookHistory))){
+                            failureBorrowedBookHistories.add(borrowedBookHistoryRepository.save(borrowedBookHistory));
+                        }
+                    }
+                    borrowedBook.setBooks(books);
+                    BorrowedBook result = borrowedBookRepository.save(borrowedBook);
+                    if(!ObjectUtils.isEmpty(result)){
+                        map.put("success", true);
+                        map.put("failureBooks", failureBooks);
+                        map.put("failureBorrowedBookHistories", failureBorrowedBookHistories);
+                        map.put("price", price);
+                        return map;
+                    }else {
+                        map.put("success", false);
+                        return map;
+                    }
+                }else {
+                    map.put("success", false);
+                    return map;
+                }
+            }else {
+                map.put("success", false);
+                return map;
             }
+        }else {
+            map.put("success", false);
+            return map;
         }
-        return null;
     }
 
     @Override
