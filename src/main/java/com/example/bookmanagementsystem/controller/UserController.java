@@ -4,6 +4,7 @@ import com.example.bookmanagementsystem.dto.AddressDTO;
 import com.example.bookmanagementsystem.dto.UserDetailsDTO;
 import com.example.bookmanagementsystem.entity.user.UserDetails;
 import com.example.bookmanagementsystem.enums.DefaultAvatarEnum;
+import com.example.bookmanagementsystem.service.BookService;
 import com.example.bookmanagementsystem.service.DefaultFileService;
 import com.example.bookmanagementsystem.service.UserDetailsService;
 import com.example.bookmanagementsystem.utils.Response;
@@ -31,6 +32,9 @@ public class UserController {
 
     @Autowired
     private DefaultFileService defaultFileService;
+    
+    @Autowired
+    private BookService bookService;
     
     @GetMapping(value = "/profile")
     public Response profile(){
@@ -98,11 +102,39 @@ public class UserController {
 
     @GetMapping(value = "/showBorrowedBookInformation")
     public Response showBorrowedBookInformation(){
-        return null;
+        /** 
+        * @Description: 返回当前未完成的借书信息 
+        * @Param: [] 
+        * @return: com.example.bookmanagementsystem.utils.Response 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/21 
+        **/ 
+        Response response = new Response();
+        Map<String, Object> map = bookService.borrowedBookInformation();
+        Boolean tag = (Boolean) map.get("success");
+        if(tag){
+            return response.success(map);
+        }else {
+            return response.failure();
+        }
     }
 
     @GetMapping(value = "/showBorrowedBookHistory")
     public Response showBorrowedBookHistory(){
-        return null;
+        /** 
+        * @Description: 返回所有借书记录 
+        * @Param: [] 
+        * @return: com.example.bookmanagementsystem.utils.Response 
+        * @Author: Simon Zhuang
+        * @Date: 2018/8/21 
+        **/
+        Response response = new Response();
+        Map<String, Object> map = bookService.borrowedBookHistory();
+        Boolean tag = (Boolean) map.get("success");
+        if(tag){
+            return response.success(map);
+        }else {
+            return response.failure();
+        }
     }
 }

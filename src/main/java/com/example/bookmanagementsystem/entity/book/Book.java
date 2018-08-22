@@ -49,12 +49,6 @@ public class Book extends BasicEntity {
     @Column
     private String number; //编号
 
-    @Column(nullable = true)
-    private Date borrowedDate;
-
-    @Column(nullable = true)
-    private Integer maxHoldingDays;
-
     @Column
     private Boolean isRenew = false; //是否续借
 
@@ -149,22 +143,6 @@ public class Book extends BasicEntity {
         this.number = number;
     }
 
-    public Date getBorrowedDate() {
-        return borrowedDate;
-    }
-
-    public void setBorrowedDate(Date borrowedDate) {
-        this.borrowedDate = borrowedDate;
-    }
-
-    public Integer getMaxHoldingDays() {
-        return maxHoldingDays;
-    }
-
-    public void setMaxHoldingDays(Integer maxHoldingDays) {
-        this.maxHoldingDays = maxHoldingDays;
-    }
-
     public BookBasicType getBookBasicType() {
         return bookBasicType;
     }
@@ -200,7 +178,7 @@ public class Book extends BasicEntity {
     public Book() {
     }
 
-    public Book(String cover, String title, String author, String isbn, String publishingHouse, Date publishedDate, Integer edition, Double price, Integer quantity, String number, Date borrowedDate, Integer maxHoldingDays, BookBasicType bookBasicType, BookShelf bookShelf) {
+    public Book(String cover, String title, String author, String isbn, String publishingHouse, Date publishedDate, Integer edition, Double price, Integer quantity, String number, BookBasicType bookBasicType, BookShelf bookShelf) {
         this.cover = cover;
         this.title = title;
         this.author = author;
@@ -211,8 +189,6 @@ public class Book extends BasicEntity {
         this.price = price;
         this.quantity = quantity;
         this.number = number;
-        this.borrowedDate = borrowedDate;
-        this.maxHoldingDays = maxHoldingDays;
         this.bookBasicType = bookBasicType;
         this.bookShelf = bookShelf;
     }

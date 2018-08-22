@@ -55,6 +55,9 @@ public class BookServiceImpl implements BookService {
     @Autowired
     private BasicUserRepository basicUserRepository;
 
+    @Autowired
+    private BorrowedBookHistoryRepository borrowedBookHistoryRepository;
+
     @Override
     public Map<String, Object> findBooksByTitleContaining(String title) {
         /** 
@@ -222,46 +225,42 @@ public class BookServiceImpl implements BookService {
     @Override
     public Map<String, Object> borrowBooks(BorrowedBookListDTO borrowedBookListDTO) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<Book> books = new ArrayList<>();
-        List<Book> successList = new ArrayList<>();
-        List<Book> failureList = new ArrayList<>();
-        BasicUser basicUser = basicUserService.findBasicUserByUsername(username);
+        BasicUser basicUser = basicUserRepository.findBasicUserByUsername(username);
+        List<BorrowedBookHistory> failureBorrowedBookHistories = new ArrayList<>();
+        List<Book> failureBooks = new ArrayList<>();
         Map<String, Object> map = new HashMap<>();
-        if(!ObjectUtils.isEmpty(basicUser) && !basicUser.getBorrowed()){
-            List<BorrowedBookDTO> borrowedBookDTOS = borrowedBookListDTO.getBorrowedBookDTOS();
+        if(!ObjectUtils.isEmpty(basicUser)){
             BorrowedBook borrowedBook = borrowedBookRepository.findBorrowedBookByBasicUser(basicUser);
-            if(ObjectUtils.isEmpty(borrowedBook)){
-                borrowedBook = new BorrowedBook();
-            }
-            if(borrowedBookDTOS.size() <= borrowedBook.getMaxBorrowedQuantity()){
-                for(BorrowedBookDTO borrowedBookDTO : borrowedBookDTOS){
-                    Book book = bookRepository.findBookByTitleAndAuthorAndIsbnAndNumber(borrowedBookDTO.getTitle(), borrowedBookDTO.getAuthor(), borrowedBookDTO.getIsbn(), borrowedBookDTO.getNumber());
-                    BookQuantity bookQuantity = bookQuantityRepository.findBookQuantityByBook(book);
-                    if(!ObjectUtils.isEmpty(book) && bookQuantity.getLeftQuantities() >= 1){
-                        book.setBorrowedDate(new Date());
-                        book.setMaxHoldingDays(30);
-                        Book returnBook = bookRepository.save(book);
-                        books.add(returnBook);
-                        Integer leftQuantity = bookQuantity.getLeftQuantities() - 1;
-                        bookQuantity.setLeftQuantities(leftQuantity);
-                        bookQuantityRepository.save(bookQuantity);
-                        successList.add(book);
-                    }else {
-                        failureList.add(book);
+            if(!ObjectUtils.isEmpty(borrowedBook)){
+                List<Book> books = borrowedBook.getBooks();
+                int canBorrowedBooksNumber = borrowedBook.getMaxBorrowedQuantity() - books.size();
+                List<BorrowedBookDTO> borrowedBookDTOS = borrowedBookListDTO.getBorrowedBookDTOS();
+                if(canBorrowedBooksNumber >= borrowedBookDTOS.size()){
+                    for(BorrowedBookDTO borrowedBookDTO: borrowedBookDTOS){
+                        Book book = bookRepository.findBookByTitleAndAuthorAndIsbnAndNumber(borrowedBookDTO.getTitle(), borrowedBookDTO.getAuthor(), borrowedBookDTO.getIsbn(), borrowedBookDTO.getNumber());
+                        if(!ObjectUtils.isEmpty(book)){
+                            books.add(book);
+                            BorrowedBookHistory borrowedBookHistory = new BorrowedBookHistory(new Date(), basicUser, book);
+                            BorrowedBookHistory borrowedBookHistoryResult = borrowedBookHistoryRepository.save(borrowedBookHistory);
+                            if(ObjectUtils.isEmpty(borrowedBookHistoryResult)){
+                                failureBorrowedBookHistories.add(borrowedBookHistoryResult);
+                            }
+                        }else{
+                            failureBooks.add(book);
+                        }
                     }
-                }
-                Integer maxBorrowNumber = borrowedBook.getMaxBorrowedQuantity() - borrowedBookDTOS.size();
-                BorrowedBook borrowedBooks = new BorrowedBook(basicUser, books, books);
-                borrowedBooks.setMaxBorrowedQuantity(maxBorrowNumber);
-                BorrowedBook result = borrowedBookRepository.save(borrowedBooks);
-                basicUser.setBorrowed(true);
-                BasicUser returnUser = basicUserRepository.save(basicUser);
-                if(!ObjectUtils.isEmpty(result) && !ObjectUtils.isEmpty(returnUser)){
-                    map.put("success", true);
-                    map.put("successList", successList);
-                    map.put("failureList", failureList);
-                    return map;
-                }else {
+                    borrowedBook.setBooks(books);
+                    BorrowedBook borrowedBookResult = borrowedBookRepository.save(borrowedBook);
+                    if(!ObjectUtils.isEmpty(borrowedBookResult)){
+                        map.put("success", true);
+                        map.put("failureBooks" , failureBooks);
+                        map.put("failureBorrowedBookHistories", failureBorrowedBookHistories);
+                        return map;
+                    }else {
+                        map.put("success", false);
+                        return map;
+                    }
+                }else{
                     map.put("success", false);
                     return map;
                 }
@@ -277,133 +276,23 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Map<String, Object> returnBooks(BorrowedBookListDTO borrowedBookListDTO) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        BasicUser basicUser = basicUserService.findBasicUserByUsername(username);
-        Map<String, Object> map = new HashMap<>();
-        List<Book> successList = new ArrayList<>();
-        List<Book> failureList = new ArrayList<>();
-        if(!ObjectUtils.isEmpty(basicUser) && basicUser.getBorrowed()){
-            BorrowedBook borrowedBook = borrowedBookRepository.findBorrowedBookByBasicUser(basicUser);
-            List<BorrowedBookDTO> borrowedBookDTOS = borrowedBookListDTO.getBorrowedBookDTOS();
-            if(!ObjectUtils.isEmpty(borrowedBook) && borrowedBookDTOS.size() <= borrowedBook.getMaxBorrowedQuantity()){
-                List<Book> books = borrowedBook.getBooks();
-                double price = 0.0;
-                for (Book book: books){
-                    for(BorrowedBookDTO borrowedBookDTO : borrowedBookDTOS){
-                        Book returnBook = bookRepository.findBookByTitleAndAuthorAndIsbnAndNumber(borrowedBookDTO.getTitle(), borrowedBookDTO.getAuthor(), borrowedBookDTO.getIsbn(), borrowedBookDTO.getNumber());
-                        if(returnBook.equals(book)){
-                            BookQuantity bookQuantity = bookQuantityRepository.findBookQuantityByBook(book);
-                            books.remove(book);
-                            Date date = book.getBorrowedDate();
-                            Date now = new Date();
-                            Long days = ((now.getTime() - date.getTime())/1000*60*60*24 + 1);
-                            if(days > book.getMaxHoldingDays()){
-                                int overdueDays = (int)(book.getMaxHoldingDays() - days);
-                                price = price + overdueDays * book.getPrice() * 0.1;
-                            }
-                            book.setMaxHoldingDays(null);
-                            book.setBorrowedDate(null);
-                            Integer leftQuantity = bookQuantity.getLeftQuantities() + 1;
-                            bookQuantity.setLeftQuantities(leftQuantity);
-                            bookQuantityRepository.save(bookQuantity);
-                            successList.add(book);
-                        }else {
-                            failureList.add(returnBook);
-                        }
-                    }
-                }
-                BorrowedBook result;
-                if(books.size() == 0){
-                    borrowedBook.setFinished(true);
-                    result = borrowedBookRepository.save(borrowedBook);
-                    basicUser.setBorrowed(false);
-                    basicUserRepository.save(basicUser);
-                }else {
-                    borrowedBook.setFinished(true);
-                    result = borrowedBookRepository.save(borrowedBook);
-                    if(!ObjectUtils.isEmpty(result)){
-                        BorrowedBook borrowedBooks = new BorrowedBook(basicUser, books);
-                        result = borrowedBookRepository.save(borrowedBooks);
-                    }
-                }
-                if(!ObjectUtils.isEmpty(result)){
-                    map.put("success", true);
-                    map.put("price", price);
-                    map.put("successList", successList);
-                    map.put("failureList", failureList);
-                    return map;
-                }else{
-                    map.put("success", false);
-                    return map;
-                }
-            }else{
-                map.put("success", false);
-                return map;
-            }
-        }else {
-            map.put("success", false);
-            return map;
-        }
+        return null;
     }
 
     @Override
     public Map<String, Object> renewBooks(BorrowedBookListDTO borrowedBookListDTO) {
-        String username = SecurityContextHolder.getContext().getAuthentication().getName();
-        BasicUser basicUser = basicUserService.findBasicUserByUsername(username);
-        Map<String, Object> map = new HashMap<>();
-        List<Book> bookList = new ArrayList<>();
-        List<Book> successList = new ArrayList<>();
-        List<Book> failureList = new ArrayList<>();
-        if(!ObjectUtils.isEmpty(basicUser) && basicUser.getBorrowed()){
-            BorrowedBook borrowedBook = borrowedBookRepository.findBorrowedBookByBasicUser(basicUser);
-            List<BorrowedBookDTO> borrowedBookDTOS = borrowedBookListDTO.getBorrowedBookDTOS();
-            if(!ObjectUtils.isEmpty(borrowedBook) && borrowedBookDTOS.size() <= borrowedBook.getMaxBorrowedQuantity()){
-                List<Book> books = borrowedBook.getBooks();
-                double price = 0.0;
-                for(Book book: books){
-                    for(BorrowedBookDTO borrowedBookDTO : borrowedBookDTOS){
-                        Book returnBook = bookRepository.findBookByTitleAndAuthorAndIsbnAndNumber(borrowedBookDTO.getTitle(), borrowedBookDTO.getAuthor(), borrowedBookDTO.getIsbn(), borrowedBookDTO.getNumber());
-                        if(returnBook.equals(book)){
-                            Date now = new Date();
-                            Date date = book.getBorrowedDate();
-                            Long days = ((now.getTime() - date.getTime())/1000*60*60*24 + 1);
-                            if(days > book.getMaxHoldingDays()){
-                                int overdueDays = (int)(book.getMaxHoldingDays() - days);
-                                price = price + overdueDays * book.getPrice() * 0.1;
-                            }
-                            book.setRenew(true);
-                            book.setMaxHoldingDays(book.getMaxHoldingDays() + 30);
-                            Book result = bookRepository.save(book);
-                            if(!ObjectUtils.isEmpty(result)){
-                                bookList.add(result);
-                                successList.add(result);
-                            }
-                        }else {
-                            bookList.add(book);
-                            failureList.add(returnBook);
-                        }
-                    }
-                }
-                borrowedBook.setBooks(bookList);
-                BorrowedBook borrowedBookResult = borrowedBookRepository.save(borrowedBook);
-                if(!ObjectUtils.isEmpty(borrowedBookResult)){
-                    map.put("success", true);
-                    map.put("successList", successList);
-                    map.put("failureList", failureList);
-                    return map;
-                }else{
-                    map.put("success", false);
-                    return map;
-                }
-            }else {
-                map.put("success", false);
-                return map;
-            }
-        }
-        else {
-            map.put("success", false);
-            return map;
-        }
+        return null;
+    }
+
+
+    @Override
+    public Map<String, Object> borrowedBookInformation() {
+        return null;
+    }
+
+    @Override
+    public Map<String, Object> borrowedBookHistory() {
+        return null;
     }
 
     private Map<String, Object> getStringObjectMap(Map<String, Object> map, Object object) {
