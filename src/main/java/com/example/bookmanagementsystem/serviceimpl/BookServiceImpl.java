@@ -305,7 +305,13 @@ public class BookServiceImpl implements BookService {
                         Calendar nowCalender = new GregorianCalendar();
                         borrowedCalender.setTime(borrowedDate);
                         nowCalender.setTime(now);
-                        int days = nowCalender.get(Calendar.DAY_OF_YEAR) - borrowedCalender.get(Calendar.DAY_OF_YEAR);
+                        int holdingDays;
+                        if(historyBook.getRenew()){
+                            holdingDays = 60;
+                        }else {
+                            holdingDays = 30;
+                        }
+                        int days = nowCalender.get(Calendar.DAY_OF_YEAR) - borrowedCalender.get(Calendar.DAY_OF_YEAR) - holdingDays;
                         price = price + days * historyBook.getPrice() * 0.1;
                         borrowedBookHistory.setFinishDate(new Date());
                         borrowedBookHistory.setFinished(true);
