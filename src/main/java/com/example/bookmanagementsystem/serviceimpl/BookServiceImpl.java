@@ -288,14 +288,7 @@ public class BookServiceImpl implements BookService {
             if(!ObjectUtils.isEmpty(borrowedBook)){
                 List<Book> books = borrowedBook.getBooks();
                 List<BorrowedBookDTO> borrowedBookDTOS = borrowedBookListDTO.getBorrowedBookDTOS();
-                for(BorrowedBookDTO borrowedBookDTO : borrowedBookDTOS){
-                    Book returnBook = bookRepository.findBookByTitleAndAuthorAndIsbnAndNumber(borrowedBookDTO.getTitle(), borrowedBookDTO.getAuthor(), borrowedBookDTO.getIsbn(), borrowedBookDTO.getNumber());
-                    if(books.contains(returnBook)){
-                        returnBooks.add(returnBook);
-                    }else {
-                        failureBooks.add(returnBook);
-                    }
-                }
+                findBooksNeedChange(failureBooks, books, returnBooks, borrowedBookDTOS);
                 if(books.removeAll(returnBooks)){
                     for(Book historyBook : returnBooks){
                         BorrowedBookHistory borrowedBookHistory = borrowedBookHistoryRepository.findBorrowedBookHistoryByBookAndBasicUserAndFinished(historyBook, basicUser, false);
@@ -347,7 +340,59 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Map<String, Object> renewBooks(BorrowedBookListDTO borrowedBookListDTO) {
-        return null;
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        BasicUser basicUser = basicUserRepository.findBasicUserByUsername(username);
+        List<Book> failureBooks = new ArrayList<>();
+        Map<String, Object> map = new HashMap<>();
+        if(!ObjectUtils.isEmpty(basicUser)){
+            BorrowedBook borrowedBook = borrowedBookRepository.findBorrowedBookByBasicUser(basicUser);
+            if(!ObjectUtils.isEmpty(borrowedBook)){
+                List<Book> books = borrowedBook.getBooks();
+                List<Book> returnBooks = new ArrayList<>();
+                List<BorrowedBookDTO> borrowedBookDTOS = borrowedBookListDTO.getBorrowedBookDTOS();
+                findBooksNeedChange(failureBooks, books, returnBooks, borrowedBookDTOS);
+                if(books.removeAll(returnBooks)){
+                    for(Book book : returnBooks){
+                        book.setRenew(true);
+                    }
+                    if(books.addAll(returnBooks)){
+                        borrowedBook.setBooks(books);
+                        BorrowedBook result = borrowedBookRepository.save(borrowedBook);
+                        if(!ObjectUtils.isEmpty(result)){
+                            map.put("success", true);
+                            map.put("failureBooks", failureBooks);
+                            return map;
+                        }else{
+                            map.put("success", false);
+                            return map;
+                        }
+                    }else {
+                        map.put("success", false);
+                        return map;
+                    }
+                }else {
+                    map.put("success", false);
+                    return map;
+                }
+            }else {
+                map.put("success", false);
+                return map;
+            }
+        }else{
+            map.put("success", false);
+            return map;
+        }
+    }
+
+    private void findBooksNeedChange(List<Book> failureBooks, List<Book> books, List<Book> returnBooks, List<BorrowedBookDTO> borrowedBookDTOS) {
+        for(BorrowedBookDTO borrowedBookDTO : borrowedBookDTOS){
+            Book returnBook = bookRepository.findBookByTitleAndAuthorAndIsbnAndNumber(borrowedBookDTO.getTitle(), borrowedBookDTO.getAuthor(), borrowedBookDTO.getIsbn(), borrowedBookDTO.getNumber());
+            if(books.contains(returnBook)){
+                returnBooks.add(returnBook);
+            }else {
+                failureBooks.add(returnBook);
+            }
+        }
     }
 
 
