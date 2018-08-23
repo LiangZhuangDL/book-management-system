@@ -398,12 +398,54 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Map<String, Object> borrowedBookInformation() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        BasicUser basicUser = basicUserRepository.findBasicUserByUsername(username);
+        List<Book> failureBookList = new ArrayList<>();
+        Map<Book, Date> bookDateMap = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
+        if(!ObjectUtils.isEmpty(basicUser)){
+            BorrowedBook borrowedBook = borrowedBookRepository.findBorrowedBookByBasicUser(basicUser);
+            List<Book> books = borrowedBook.getBooks();
+            for(Book book: books){
+                BorrowedBookHistory borrowedBookHistory = borrowedBookHistoryRepository.findBorrowedBookHistoryByBookAndBasicUserAndFinished(book, basicUser, false);
+                if(!ObjectUtils.isEmpty(borrowedBookHistory)){
+                    Date createDate = borrowedBookHistory.getCreateTime();
+                    bookDateMap.put(book, createDate);
+                }else{
+                    failureBookList.add(book);
+                }
+            }
+            map.put("success", true);
+            map.put("failureBookList", failureBookList);
+            map.put("bookDateMap", bookDateMap);
+            map.put("books", books);
+            return map;
+        }else{
+            map.put("success", false);
+        }
         return null;
     }
 
     @Override
-    public Map<String, Object> borrowedBookHistory() {
-        return null;
+    public Map<String, Object> borrowedBookHistory(Integer size, Integer page) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        BasicUser basicUser = basicUserRepository.findBasicUserByUsername(username);
+        Map<String, Object> map = new HashMap<>();
+        if(!ObjectUtils.isEmpty(basicUser)){
+            Pageable pageable = PageRequest.of(page, size);
+            Page<BorrowedBookHistory> borrowedBookHistories = borrowedBookHistoryRepository.findBorrowedBookHistoriesByBasicUser(basicUser, pageable);
+            if(!ObjectUtils.isEmpty(borrowedBookHistories)){
+                map.put("success", true);
+                map.put("borrowedBookHistories", borrowedBookHistories);
+                return map;
+            }else {
+                map.put("success", false);
+                return map;
+            }
+        }else{
+            map.put("success", false);
+            return map;
+        }
     }
 
     private Map<String, Object> getStringObjectMap(Map<String, Object> map, Object object) {

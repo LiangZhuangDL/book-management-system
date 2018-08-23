@@ -49,6 +49,6 @@ public interface BookService {
     Map<String, Object> borrowedBookInformation();
 
     @Transactional
-    Map<String, Object> borrowedBookHistory();
+    Map<String, Object> borrowedBookHistory(Integer size, Integer page);
 
 }

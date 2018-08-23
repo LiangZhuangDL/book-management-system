@@ -119,8 +119,8 @@ public class UserController {
         }
     }
 
-    @GetMapping(value = "/showBorrowedBookHistory")
-    public Response showBorrowedBookHistory(){
+    @GetMapping(value = "/showBorrowedBookHistory/{size}/{page}")
+    public Response showBorrowedBookHistory(@PathVariable("size")Integer size, @PathVariable("page")Integer page){
         /** 
         * @Description: 返回所有借书记录 
         * @Param: [] 
@@ -129,7 +129,7 @@ public class UserController {
         * @Date: 2018/8/21 
         **/
         Response response = new Response();
-        Map<String, Object> map = bookService.borrowedBookHistory();
+        Map<String, Object> map = bookService.borrowedBookHistory(size, page);
         Boolean tag = (Boolean) map.get("success");
         if(tag){
             return response.success(map);
